@@ -24,6 +24,10 @@ class InternalStoragePhotoAdapter(
 ) : ListAdapter<InternalStoragePhoto, InternalStoragePhotoAdapter.InternalStoragePhotoViewHolder>(Companion) {
 
 
+    inner class InternalStoragePhotoViewHolder(
+        val binding: ItemPhotoBinding
+    ): RecyclerView.ViewHolder(binding.root)
+
     companion object : DiffUtil.ItemCallback<InternalStoragePhoto>(){
         override fun areItemsTheSame(
             oldItem: InternalStoragePhoto,
@@ -40,10 +44,6 @@ class InternalStoragePhotoAdapter(
         }
 
     }
-
-    class InternalStoragePhotoViewHolder(
-        val binding: ItemPhotoBinding
-    ): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
