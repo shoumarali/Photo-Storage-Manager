@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.adapter
+package com.alishoumar.androidstorage.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,12 +6,14 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.alishoumar.androidstorage.data.ExternalStoragePhoto
+import com.alishoumar.androidstorage.domain.models.ExternalStoragePhoto
 import com.alishoumar.androidstorage.databinding.ItemPhotoBinding
 
 class SharedStoragePhotoAdapter(
     val onPhotoClick:(ExternalStoragePhoto) -> Unit
-) : ListAdapter<ExternalStoragePhoto, SharedStoragePhotoAdapter.SharedStoragePhotoViewHolder>(Companion) {
+) : ListAdapter<ExternalStoragePhoto, SharedStoragePhotoAdapter.SharedStoragePhotoViewHolder>(
+    Companion
+) {
 
     companion object : DiffUtil.ItemCallback<ExternalStoragePhoto>(){
         override fun areItemsTheSame(

@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.data
+package com.alishoumar.androidstorage.domain.models
 
 import android.graphics.Bitmap
 

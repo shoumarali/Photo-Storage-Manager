@@ -1,6 +1,5 @@
-package com.alishoumar.androidstorage.data
+package com.alishoumar.androidstorage.domain.models
 
-import android.graphics.Bitmap
 import android.net.Uri
 
 data class ExternalStoragePhoto(

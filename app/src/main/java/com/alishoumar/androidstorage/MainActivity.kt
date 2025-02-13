@@ -1,47 +1,43 @@
 package com.alishoumar.androidstorage
 
 import android.Manifest
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.database.ContentObserver
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.contentValuesOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.alishoumar.androidstorage.adapter.InternalStoragePhotoAdapter
-import com.alishoumar.androidstorage.adapter.SharedStoragePhotoAdapter
-import com.alishoumar.androidstorage.data.ExternalStoragePhoto
-import com.alishoumar.androidstorage.data.InternalStoragePhoto
+import com.alishoumar.androidstorage.presentation.adapter.InternalStoragePhotoAdapter
+import com.alishoumar.androidstorage.presentation.adapter.SharedStoragePhotoAdapter
+import com.alishoumar.androidstorage.presentation.adapter.SpaceItemDecoration
+import com.alishoumar.androidstorage.domain.models.ExternalStoragePhoto
 import com.alishoumar.androidstorage.databinding.ActivityMainBinding
+import com.alishoumar.androidstorage.domain.usecases.StorageUseCases
 import com.alishoumar.androidstorage.util.sdk24AndAbove
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
-import java.io.OutputStream
 import java.util.UUID
+import javax.inject.Inject
 
-/*internal storage is your private storage in your app no other app can access internal storage of other
-app unless the phone is rooted
-*/
-
-/*
-start activity for result is used to start activity and waite for result for example like permission
- */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -51,6 +47,13 @@ class MainActivity : AppCompatActivity() {
     private var isReadPermissionGranted:Boolean = false
     private var isWritePermissionGranted:Boolean = false
     private lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
+    private lateinit var contentObserver : ContentObserver
+    private lateinit var itemDecoration : SpaceItemDecoration
+    private lateinit var intentSenderLauncher : ActivityResultLauncher<IntentSenderRequest>
+
+    @Inject
+    lateinit var useCases: StorageUseCases
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,14 +67,17 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        itemDecoration = SpaceItemDecoration(16)
 
         internalStoragePhotoAdapter = InternalStoragePhotoAdapter {
-            val isDeleted = deletePhotoFromInternalStorage(it.name)
-            if(isDeleted){
-                LoadPhotosFromInternalStorageToRecyclerView()
-                Toast.makeText(this, "Deleted Successfully", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(this, "Failed to delete", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                val isDeleted = useCases.deletePhotoFromInternalStorageUseCase(it.name)
+                if (isDeleted) {
+                    loadPhotosFromInternalStorageToRecyclerView()
+                    Toast.makeText(this@MainActivity, "Deleted Successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@MainActivity, "Failed to delete", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -85,29 +91,45 @@ class MainActivity : AppCompatActivity() {
             callback = {
                 isReadPermissionGranted = it[Manifest.permission.READ_EXTERNAL_STORAGE]?:false
                 isWritePermissionGranted = it[Manifest.permission.WRITE_EXTERNAL_STORAGE]?:false
+
+                if(isReadPermissionGranted){
+                    loadPhotosFromExternalStorageToRecyclerView()
+                }else{
+                    Toast.makeText(this, "Cannot read files from external storage", Toast.LENGTH_SHORT).show()
+                }
             }
         )
         updateOrRequestPermissions()
         setUpInternalStorageRecyclerViews()
-        LoadPhotosFromInternalStorageToRecyclerView()
+        loadPhotosFromInternalStorageToRecyclerView()
+        setUpExternalStorageRecyclerView()
+        initContentObserver()
+        loadPhotosFromExternalStorageToRecyclerView()
 
         val takePhoto = registerForActivityResult(
             contract = ActivityResultContracts.TakePicturePreview(),
-            callback ={
-                val isPrivate = binding.switchPrivate.isChecked
-                val isSavedSuccessfully= when {
-                    isPrivate -> savePhotoToInternalStorage(UUID.randomUUID().toString(), it!!)
-                    isWritePermissionGranted -> savePhotoToExternalStorage(UUID.randomUUID().toString(), bmp = it!!)
-                    else -> false
-                }
+            callback = {
+                lifecycleScope.launch {
+                    val isPrivate = binding.switchPrivate.isChecked
+                    val isSavedSuccessfully = when {
+                        isPrivate -> useCases.savePhotoInternalStorageUseCase(
+                            UUID.randomUUID().toString(),
+                            it!!)
+                        isWritePermissionGranted -> savePhotoToExternalStorage(
+                            UUID.randomUUID().toString(), bmp = it!!
+                        )
 
-                if(isPrivate){
-                    LoadPhotosFromInternalStorageToRecyclerView()
-                }
-                if(isSavedSuccessfully){
-                    Toast.makeText(this, "saved successfully", Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(this, "Failed to save", Toast.LENGTH_SHORT).show()
+                        else -> false
+                    }
+
+                    if (isPrivate) {
+                        loadPhotosFromInternalStorageToRecyclerView()
+                    }
+                    if (isSavedSuccessfully) {
+                        Toast.makeText(this@MainActivity, "saved successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@MainActivity, "Failed to save", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         )
@@ -117,61 +139,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    we got 2 types of streams input stream and output stream
-    output stream when we have bitmap and we want to put them out to a file
-    input when we have a file and we want to put them in a bmp
-
-    use is kotlin extension function specific to file stream it close our stream after we wrote to it
-    or an exception is thrown
-     */
-
-    private fun savePhotoToInternalStorage(fileName: String, bmp: Bitmap): Boolean{
-        return try {
-            openFileOutput("$fileName.jpg", MODE_PRIVATE).use {stream ->
-                if(!bmp.compress(Bitmap.CompressFormat.JPEG, 95, stream)){
-                    throw IOException("Couldn't save bitmap")
-                }
-            }
-            true
-        }catch (e: IOException){
-            e.printStackTrace()
-            false
-        }
-    }
-
-    private suspend fun loadPhotosFromInternalStorage():List<InternalStoragePhoto>{
-        return  withContext(Dispatchers.IO){
-            val files = filesDir.listFiles()
-            files?.filter { it.canRead() && it.isFile && it.name.endsWith(".jpg") }?.map {
-                val bytes = it.readBytes()
-                val bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
-                InternalStoragePhoto(it.name,bmp)
-            } ?: listOf()
-        }
-    }
-
-    private fun deletePhotoFromInternalStorage(fileName: String): Boolean{
-        return try {
-            deleteFile(fileName)
-        }catch (e: Exception){
-            e.printStackTrace()
-            false
-        }
-    }
-
-    private fun LoadPhotosFromInternalStorageToRecyclerView(){
-        lifecycleScope.launch {
-            val photos = loadPhotosFromInternalStorage()
-            internalStoragePhotoAdapter.submitList(photos)
-        }
-    }
 
     private fun setUpInternalStorageRecyclerViews()=binding.rvPrivatePhotos.apply{
         adapter = internalStoragePhotoAdapter
         layoutManager = StaggeredGridLayoutManager(3,RecyclerView.VERTICAL)
+        addItemDecoration(itemDecoration)
+    }
+
+    private fun loadPhotosFromInternalStorageToRecyclerView(){
+        lifecycleScope.launch {
+            val photos = useCases.loadPhotosFromInternalStorageUseCase()
+            internalStoragePhotoAdapter.submitList(photos)
+        }
+    }
+
+    private fun setUpExternalStorageRecyclerView()=binding.rvPublicPhotos.apply{
+        adapter = externalStoragePhotoAdapter
+        layoutManager = StaggeredGridLayoutManager(3,RecyclerView.VERTICAL)
+        addItemDecoration(itemDecoration)
 
     }
+
+    private fun loadPhotosFromExternalStorageToRecyclerView(){
+        lifecycleScope.launch {
+         val photos = loadPhotosFromExternalStorage()
+         externalStoragePhotoAdapter.submitList(photos)
+        }
+    }
+
 
     private fun updateOrRequestPermissions(){
         val hasReadPermission = ContextCompat
@@ -199,34 +194,97 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun savePhotoToExternalStorage(displayName:String , bmp: Bitmap):Boolean{
-        val imageCollection = sdk24AndAbove {
-            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        }?:MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+    private suspend fun savePhotoToExternalStorage(displayName:String , bmp: Bitmap):Boolean{
+        return withContext(Dispatchers.IO) {
+            val imageCollection = sdk24AndAbove {
+                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+            } ?: MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME,"$displayName.jpg")
-            put(MediaStore.Images.Media.MIME_TYPE,"image/jpg")
-            put(MediaStore.Images.Media.WIDTH, bmp.width)
-            put(MediaStore.Images.Media.HEIGHT, bmp.height)
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, "$displayName.jpg")
+                put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+                put(MediaStore.Images.Media.WIDTH, bmp.width)
+                put(MediaStore.Images.Media.HEIGHT, bmp.height)
+            }
+            try {
+                contentResolver.insert(imageCollection, contentValues)?.also { uri ->
+                    contentResolver.openOutputStream(uri)?.use {
+                        if (!bmp.compress(Bitmap.CompressFormat.JPEG, 95, it)) {
+                            throw IOException("Couldn't save the bitmap")
+                        }
+                    }
+                } ?: throw IOException("Couldn't create media store entry")
+                true
+            } catch (e: IOException) {
+                e.printStackTrace()
+                false
+            }
         }
+    }
 
-        /*the insert method will only save the metadata of the image in big database and it will return
-        the uri of the image where we can actually save it
-         */
+    private fun initContentObserver(){
+        contentObserver = object : ContentObserver(null){
+            override fun onChange(selfChange: Boolean) {
+                if(isReadPermissionGranted){
+                    loadPhotosFromExternalStorageToRecyclerView()
+                }
+            }
+        }
+        contentResolver.registerContentObserver(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            true,
+            contentObserver
+        )
+    }
 
-        return try {
-            contentResolver.insert(imageCollection, contentValues)?.also {uri ->
-                contentResolver.openOutputStream(uri)?.use {
-                    if(!bmp.compress(Bitmap.CompressFormat.JPEG, 95, it)){
-                        throw IOException("Couldn't save the bitmap")
+    private suspend fun loadPhotosFromExternalStorage():List<ExternalStoragePhoto>{
+        return withContext(Dispatchers.IO){
+            val collection = sdk24AndAbove {
+                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+            } ?: MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            val projection = arrayOf(
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media.WIDTH,
+                MediaStore.Images.Media.HEIGHT
+            )
+
+            val photos = mutableListOf<ExternalStoragePhoto>()
+
+            contentResolver.query(
+                collection,
+                projection,
+                null,
+                null,
+                "${MediaStore.Images.Media.DISPLAY_NAME} ASC"
+            ).use {cursor ->
+
+                if(cursor != null) {
+
+                    val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+                    val displayNameColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+                    val widthColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.WIDTH)
+                    val heightColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.HEIGHT)
+
+                    while (cursor.moveToNext()) {
+                        val id = cursor.getLong(idColumn)
+                        val displayName = cursor.getString(displayNameColumn)
+                        val width = cursor.getInt(widthColumn)
+                        val height = cursor.getInt(heightColumn)
+                        val contentUri = ContentUris.withAppendedId(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            id
+                        )
+                        photos.add(ExternalStoragePhoto(id,displayName,width,height,contentUri))
                     }
                 }
-            }?: throw IOException("Couldn't create media store entry")
-            true
-        }catch (e:IOException){
-            e.printStackTrace()
-            false
+                photos.toList()
+            }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        contentResolver.unregisterContentObserver(contentObserver)
     }
 }

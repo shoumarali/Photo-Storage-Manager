@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.adapter
+package com.alishoumar.androidstorage.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.alishoumar.androidstorage.data.InternalStoragePhoto
+import com.alishoumar.androidstorage.domain.models.InternalStoragePhoto
 import com.alishoumar.androidstorage.databinding.ItemPhotoBinding
 
 /*
@@ -21,7 +21,9 @@ performance will be better
 
 class InternalStoragePhotoAdapter(
     private val onPhotoClick : (internalPhoto : InternalStoragePhoto) -> Unit
-) : ListAdapter<InternalStoragePhoto, InternalStoragePhotoAdapter.InternalStoragePhotoViewHolder>(Companion) {
+) : ListAdapter<InternalStoragePhoto, InternalStoragePhotoAdapter.InternalStoragePhotoViewHolder>(
+    Companion
+) {
 
 
     inner class InternalStoragePhotoViewHolder(
