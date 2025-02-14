@@ -7,11 +7,9 @@ plugins {
 
 buildscript {
     repositories {
-        // other repositories...
         mavenCentral()
     }
     dependencies {
-        // other plugins...
         classpath(libs.hilt.android.gradle.plugin)
     }
 }
