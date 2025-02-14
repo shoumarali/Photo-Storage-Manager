@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -27,7 +28,6 @@ import com.alishoumar.androidstorage.presentation.adapter.SharedStoragePhotoAdap
 import com.alishoumar.androidstorage.presentation.adapter.SpaceItemDecoration
 import com.alishoumar.androidstorage.domain.models.ExternalStoragePhoto
 import com.alishoumar.androidstorage.databinding.ActivityMainBinding
-import com.alishoumar.androidstorage.domain.usecases.StorageUseCases
 import com.alishoumar.androidstorage.util.sdk24AndAbove
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +35,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.UUID
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -51,9 +50,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var itemDecoration : SpaceItemDecoration
     private lateinit var intentSenderLauncher : ActivityResultLauncher<IntentSenderRequest>
 
-    @Inject
-    lateinit var useCases: StorageUseCases
-
+    private val fooViewModel: StorageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,15 +67,7 @@ class MainActivity : AppCompatActivity() {
         itemDecoration = SpaceItemDecoration(16)
 
         internalStoragePhotoAdapter = InternalStoragePhotoAdapter {
-            lifecycleScope.launch {
-                val isDeleted = useCases.deletePhotoFromInternalStorageUseCase(it.name)
-                if (isDeleted) {
-                    loadPhotosFromInternalStorageToRecyclerView()
-                    Toast.makeText(this@MainActivity, "Deleted Successfully", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@MainActivity, "Failed to delete", Toast.LENGTH_SHORT).show()
-                }
-            }
+            fooViewModel.deletePhotoFromInternalStorage(it.name)
         }
 
 
@@ -100,9 +89,8 @@ class MainActivity : AppCompatActivity() {
             }
         )
         updateOrRequestPermissions()
-        setUpInternalStorageRecyclerViews()
-        loadPhotosFromInternalStorageToRecyclerView()
-        setUpExternalStorageRecyclerView()
+        setUpRecyclerViews()
+        setUpObservables()
         initContentObserver()
         loadPhotosFromExternalStorageToRecyclerView()
 
@@ -111,24 +99,14 @@ class MainActivity : AppCompatActivity() {
             callback = {
                 lifecycleScope.launch {
                     val isPrivate = binding.switchPrivate.isChecked
-                    val isSavedSuccessfully = when {
-                        isPrivate -> useCases.savePhotoInternalStorageUseCase(
+                    when {
+                        isPrivate -> fooViewModel.savePhotoToInternalStorage(
                             UUID.randomUUID().toString(),
                             it!!)
+
                         isWritePermissionGranted -> savePhotoToExternalStorage(
                             UUID.randomUUID().toString(), bmp = it!!
                         )
-
-                        else -> false
-                    }
-
-                    if (isPrivate) {
-                        loadPhotosFromInternalStorageToRecyclerView()
-                    }
-                    if (isSavedSuccessfully) {
-                        Toast.makeText(this@MainActivity, "saved successfully", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this@MainActivity, "Failed to save", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -140,24 +118,24 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setUpInternalStorageRecyclerViews()=binding.rvPrivatePhotos.apply{
-        adapter = internalStoragePhotoAdapter
-        layoutManager = StaggeredGridLayoutManager(3,RecyclerView.VERTICAL)
-        addItemDecoration(itemDecoration)
-    }
+    private fun setUpRecyclerViews(){
+        binding.rvPrivatePhotos.apply{
+            adapter = internalStoragePhotoAdapter
+            layoutManager = StaggeredGridLayoutManager(3,RecyclerView.VERTICAL)
+            addItemDecoration(itemDecoration)
+        }
 
-    private fun loadPhotosFromInternalStorageToRecyclerView(){
-        lifecycleScope.launch {
-            val photos = useCases.loadPhotosFromInternalStorageUseCase()
-            internalStoragePhotoAdapter.submitList(photos)
+        binding.rvPublicPhotos.apply{
+            adapter = externalStoragePhotoAdapter
+            layoutManager = StaggeredGridLayoutManager(3,RecyclerView.VERTICAL)
+            addItemDecoration(itemDecoration)
+
         }
     }
-
-    private fun setUpExternalStorageRecyclerView()=binding.rvPublicPhotos.apply{
-        adapter = externalStoragePhotoAdapter
-        layoutManager = StaggeredGridLayoutManager(3,RecyclerView.VERTICAL)
-        addItemDecoration(itemDecoration)
-
+    private fun setUpObservables(){
+        fooViewModel.internalPhotos.observe(this) {
+            internalStoragePhotoAdapter.submitList(it)
+        }
     }
 
     private fun loadPhotosFromExternalStorageToRecyclerView(){
