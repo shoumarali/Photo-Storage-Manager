@@ -1,9 +1,8 @@
-package com.alishoumar.androidstorage.domain.usecases
+package com.alishoumar.androidstorage.domain.usecases.InternalStorage
 
 import android.graphics.Bitmap
 import com.alishoumar.androidstorage.domain.repository.InternalStorageRepository
 import java.io.IOException
-import javax.inject.Inject
 
 class SavePhotoInternalStorageUseCase (
     private val repository: InternalStorageRepository

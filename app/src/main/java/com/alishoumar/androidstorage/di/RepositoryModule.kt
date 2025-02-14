@@ -1,6 +1,8 @@
 package com.alishoumar.androidstorage.di
 
+import com.alishoumar.androidstorage.data.repository.ExternalStorageRepositoryImpl
 import com.alishoumar.androidstorage.data.repository.InternalStorageRepositoryImpl
+import com.alishoumar.androidstorage.domain.repository.ExternalStorageRepository
 import com.alishoumar.androidstorage.domain.repository.InternalStorageRepository
 import dagger.Binds
 import dagger.Module
@@ -18,4 +20,11 @@ abstract class RepositoryModule {
     abstract fun bindInternalStorageRepository(
         internalStorageRepositoryImpl: InternalStorageRepositoryImpl
     ):InternalStorageRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindExternalStorageRepository(
+        externalStorageRepositoryImpl: ExternalStorageRepositoryImpl
+    ): ExternalStorageRepository
+
 }

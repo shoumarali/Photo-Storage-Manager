@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.io.IOException
-import javax.inject.Inject
 
 class InternalStoragePhotoApi (
    @ApplicationContext private val application: Application

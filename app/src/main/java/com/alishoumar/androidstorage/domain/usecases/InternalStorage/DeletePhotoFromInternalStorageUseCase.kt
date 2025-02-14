@@ -1,7 +1,6 @@
-package com.alishoumar.androidstorage.domain.usecases
+package com.alishoumar.androidstorage.domain.usecases.InternalStorage
 
 import com.alishoumar.androidstorage.domain.repository.InternalStorageRepository
-import javax.inject.Inject
 
 class DeletePhotoFromInternalStorageUseCase(
     private val repository: InternalStorageRepository

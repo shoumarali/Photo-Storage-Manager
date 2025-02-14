@@ -1,12 +1,16 @@
 package com.alishoumar.androidstorage.di
 
 import android.app.Application
+import com.alishoumar.androidstorage.data.local.storage.ExternalStoragePhotoApi
 import com.alishoumar.androidstorage.data.local.storage.InternalStoragePhotoApi
+import com.alishoumar.androidstorage.domain.repository.ExternalStorageRepository
 import com.alishoumar.androidstorage.domain.repository.InternalStorageRepository
-import com.alishoumar.androidstorage.domain.usecases.DeletePhotoFromInternalStorageUseCase
-import com.alishoumar.androidstorage.domain.usecases.LoadPhotosFromInternalStorageUseCase
-import com.alishoumar.androidstorage.domain.usecases.SavePhotoInternalStorageUseCase
-import com.alishoumar.androidstorage.domain.usecases.StorageUseCases
+import com.alishoumar.androidstorage.domain.usecases.InternalStorage.InternalStorageUseCases
+import com.alishoumar.androidstorage.domain.usecases.InternalStorage.DeletePhotoFromInternalStorageUseCase
+import com.alishoumar.androidstorage.domain.usecases.InternalStorage.LoadPhotosFromInternalStorageUseCase
+import com.alishoumar.androidstorage.domain.usecases.InternalStorage.SavePhotoInternalStorageUseCase
+import com.alishoumar.androidstorage.domain.usecases.externalStorage.LoadPhotosFromExternalStorageUseCase
+import com.alishoumar.androidstorage.domain.usecases.externalStorage.SavePhotoToExternalStorageUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,9 +30,15 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideExternalStorageApi(application: Application): ExternalStoragePhotoApi {
+        return ExternalStoragePhotoApi(application)
+    }
+
+    @Singleton
+    @Provides
     fun provideLoadPhotosFromInternalStorageUseCase(
         internalStorageRepository: InternalStorageRepository
-    ):LoadPhotosFromInternalStorageUseCase{
+    ): LoadPhotosFromInternalStorageUseCase {
         return LoadPhotosFromInternalStorageUseCase(
             internalStorageRepository
         )
@@ -38,7 +48,7 @@ object AppModule {
     @Provides
     fun provideDeletePhotosFromInternalStorageUseCase(
         internalStorageRepository: InternalStorageRepository
-    ): DeletePhotoFromInternalStorageUseCase{
+    ): DeletePhotoFromInternalStorageUseCase {
         return DeletePhotoFromInternalStorageUseCase(internalStorageRepository)
     }
 
@@ -46,21 +56,37 @@ object AppModule {
     @Provides
     fun provideSavePhotoToInternalStorageUseCase(
         internalStorageRepository: InternalStorageRepository
-    ):SavePhotoInternalStorageUseCase{
+    ): SavePhotoInternalStorageUseCase {
         return SavePhotoInternalStorageUseCase(internalStorageRepository)
     }
 
     @Singleton
     @Provides
-    fun provideStorageUseCases(
+    fun provideInternalStorageUseCases(
         loadPhotosFromInternalStorageUseCase: LoadPhotosFromInternalStorageUseCase,
         savePhotoInternalStorageUseCase: SavePhotoInternalStorageUseCase,
         deletePhotoFromInternalStorageUseCase: DeletePhotoFromInternalStorageUseCase
-    ):StorageUseCases{
-        return StorageUseCases(
+    ): InternalStorageUseCases {
+        return InternalStorageUseCases(
             loadPhotosFromInternalStorageUseCase,
             savePhotoInternalStorageUseCase,
             deletePhotoFromInternalStorageUseCase
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideLoadPhotosFromExternalStorageUseCase(
+        externalStorageRepository: ExternalStorageRepository
+    ): LoadPhotosFromExternalStorageUseCase{
+        return LoadPhotosFromExternalStorageUseCase(externalStorageRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSavePhotoToExternalStorageUseCase(
+        externalStorageRepository: ExternalStorageRepository
+    ):SavePhotoToExternalStorageUseCase{
+        return SavePhotoToExternalStorageUseCase(externalStorageRepository)
     }
 }

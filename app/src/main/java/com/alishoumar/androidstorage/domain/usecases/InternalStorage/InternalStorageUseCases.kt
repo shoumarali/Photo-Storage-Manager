@@ -1,8 +1,6 @@
-package com.alishoumar.androidstorage.domain.usecases
+package com.alishoumar.androidstorage.domain.usecases.InternalStorage
 
-import javax.inject.Inject
-
-class StorageUseCases (
+class InternalStorageUseCases (
     val loadPhotosFromInternalStorageUseCase: LoadPhotosFromInternalStorageUseCase,
     val savePhotoInternalStorageUseCase: SavePhotoInternalStorageUseCase,
     val deletePhotoFromInternalStorageUseCase: DeletePhotoFromInternalStorageUseCase

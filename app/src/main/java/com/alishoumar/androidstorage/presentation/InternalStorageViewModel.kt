@@ -1,14 +1,12 @@
-package com.alishoumar.androidstorage
+package com.alishoumar.androidstorage.presentation
 
-import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alishoumar.androidstorage.domain.models.InternalStoragePhoto
-import com.alishoumar.androidstorage.domain.usecases.LoadPhotosFromInternalStorageUseCase
-import com.alishoumar.androidstorage.domain.usecases.StorageUseCases
+import com.alishoumar.androidstorage.domain.usecases.InternalStorage.InternalStorageUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -18,8 +16,8 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class StorageViewModel @Inject constructor(
-    private val useCases: StorageUseCases
+class InternalStorageViewModel @Inject constructor(
+    private val useCases: InternalStorageUseCases
 ) : ViewModel() {
 
 
