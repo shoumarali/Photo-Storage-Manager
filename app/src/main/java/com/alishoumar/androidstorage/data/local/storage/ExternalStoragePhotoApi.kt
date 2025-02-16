@@ -1,10 +1,13 @@
 package com.alishoumar.androidstorage.data.local.storage
 
 import android.app.Application
+import android.app.RecoverableSecurityException
 import android.content.ContentUris
 import android.content.ContentValues
+import android.content.IntentSender
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import com.alishoumar.androidstorage.data.local.storage.dao.ExternalPhotoDto
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -78,5 +81,27 @@ class ExternalStoragePhotoApi(
                 }
             }
         } ?: throw IOException("Couldn't create media store entry")
+    }
+
+    fun deletePhotoFromExternalStorage(photoUri: Uri){
+        application.contentResolver.delete(photoUri,null,null)
+    }
+
+    fun deletePhotoFromExternalStorageApi29AndAbove(
+        photoUri:Uri,
+        recoverableSecurityException: RecoverableSecurityException?
+    ): IntentSender?{
+        return when{
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+                MediaStore.createDeleteRequest(
+                    application.contentResolver,
+                    listOf(photoUri)
+                ).intentSender
+            }
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ->{
+                recoverableSecurityException?.userAction?.actionIntent?.intentSender
+            }
+            else -> null
+        }
     }
 }

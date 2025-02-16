@@ -1,5 +1,6 @@
 package com.alishoumar.androidstorage.presentation
 
+import android.content.IntentSender
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -9,11 +10,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alishoumar.androidstorage.domain.models.ExternalStoragePhoto
+import com.alishoumar.androidstorage.domain.usecases.externalStorage.DeletePhotoFromExternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.externalStorage.LoadPhotosFromExternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.externalStorage.SavePhotoToExternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.permissions.GetUnGrantedPermissionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -22,6 +25,7 @@ import javax.inject.Inject
 class ExternalStorageViewModel @Inject constructor(
     private val loadPhotosFromExternalStorageUseCase: LoadPhotosFromExternalStorageUseCase,
     private val savePhotoToExternalStorageUseCase: SavePhotoToExternalStorageUseCase,
+    private val deletePhotoFromExternalStorageUseCase: DeletePhotoFromExternalStorageUseCase,
     private val getUnGrantedPermissionsUseCase: GetUnGrantedPermissionsUseCase
 ) :ViewModel(){
 
@@ -66,20 +70,19 @@ class ExternalStorageViewModel @Inject constructor(
         }
     }
 
+    suspend fun deletePhotoFromExternalStorage(photoUri: Uri): IntentSender?{
+        return deletePhotoFromExternalStorageUseCase(photoUri)
+    }
 
      private fun setUnGrantedPermissions(){
         _unGrantedPermissions.value = getUnGrantedPermissionsUseCase()
     }
 
-   private fun getCollection(): Uri{
-        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        }else{
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        }
-    }
-
-    fun initializeContentObserver(){
-
-    }
+   private fun getCollection(): Uri {
+       return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+           MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+       } else {
+           MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+       }
+   }
 }

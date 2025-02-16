@@ -9,6 +9,7 @@ import com.alishoumar.androidstorage.domain.usecases.InternalStorage.InternalSto
 import com.alishoumar.androidstorage.domain.usecases.InternalStorage.DeletePhotoFromInternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.InternalStorage.LoadPhotosFromInternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.InternalStorage.SavePhotoInternalStorageUseCase
+import com.alishoumar.androidstorage.domain.usecases.externalStorage.DeletePhotoFromExternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.externalStorage.LoadPhotosFromExternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.externalStorage.SavePhotoToExternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.permissions.GetUnGrantedPermissionsUseCase
@@ -89,6 +90,14 @@ object AppModule {
         externalStorageRepository: ExternalStorageRepository
     ):SavePhotoToExternalStorageUseCase{
         return SavePhotoToExternalStorageUseCase(externalStorageRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeletePhotoFromExternalStorageUseCase(
+        externalStorageRepository: ExternalStorageRepository
+    ): DeletePhotoFromExternalStorageUseCase{
+        return DeletePhotoFromExternalStorageUseCase(externalStorageRepository)
     }
 
     @Singleton

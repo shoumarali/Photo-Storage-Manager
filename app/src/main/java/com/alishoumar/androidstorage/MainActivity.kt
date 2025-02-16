@@ -1,10 +1,14 @@
 package com.alishoumar.androidstorage
 
 import android.database.ContentObserver
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.activity.viewModels
@@ -21,11 +25,14 @@ import com.alishoumar.androidstorage.databinding.ActivityMainBinding
 import com.alishoumar.androidstorage.presentation.ExternalStorageViewModel
 import com.alishoumar.androidstorage.presentation.InternalStorageViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var internalStoragePhotoAdapter: InternalStoragePhotoAdapter
@@ -35,7 +42,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var registerPermissions: ActivityResultLauncher<Array<String>>
     private val internalStorageViewModel: InternalStorageViewModel by viewModels()
     private val externalStorageViewModel: ExternalStorageViewModel by viewModels()
-
+    private var deletedPhotoUri:Uri? = null
+    private lateinit var intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +59,29 @@ class MainActivity : AppCompatActivity() {
         }
         itemDecoration = SpaceItemDecoration(16)
 
+         intentSenderLauncher =registerForActivityResult(
+            contract = ActivityResultContracts.StartIntentSenderForResult(),
+            callback = {
+                if (it.resultCode == RESULT_OK) {
+                    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
+                        lifecycleScope.launch {
+                            deletePhotoFromExternalStorage(deletedPhotoUri ?: return@launch)
+                        }
+                        Toast.makeText(this, "Photo Deleted Successfully", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        )
+
         internalStoragePhotoAdapter = InternalStoragePhotoAdapter {
             internalStorageViewModel.deletePhotoFromInternalStorage(it.name)
         }
 
         externalStoragePhotoAdapter = SharedStoragePhotoAdapter {
-
+            lifecycleScope.launch {
+                deletePhotoFromExternalStorage(it.uri)
+                deletedPhotoUri = it.uri
+            }
         }
 
         registerPermissions = registerForActivityResult(
@@ -64,9 +89,11 @@ class MainActivity : AppCompatActivity() {
             callback = {}
         )
 
+
         setUpRecyclerViews()
         setUpObservables()
         initContentObserver()
+
 
         val takePhoto = registerForActivityResult(
             contract = ActivityResultContracts.TakePicturePreview(),
@@ -88,7 +115,6 @@ class MainActivity : AppCompatActivity() {
             takePhoto.launch()
         }
     }
-
 
     private fun setUpRecyclerViews(){
         binding.rvPrivatePhotos.apply{
@@ -113,6 +139,16 @@ class MainActivity : AppCompatActivity() {
         }
         externalStorageViewModel.externalStoragePhotos.observe(this){
             externalStoragePhotoAdapter.submitList(it)
+        }
+    }
+
+    private suspend fun deletePhotoFromExternalStorage(photoUri: Uri){
+        withContext (Dispatchers.IO){
+            externalStorageViewModel.deletePhotoFromExternalStorage(photoUri)?.let {sender ->
+                intentSenderLauncher.launch(
+                    IntentSenderRequest.Builder(sender).build()
+                )
+            }
         }
     }
 
