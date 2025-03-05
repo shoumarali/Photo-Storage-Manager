@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/externalStorageFragment"
+        android:title="Public Photos"
+        android:icon="@drawable/baseline_photo_library_24"
+        />
+
+    <item
+        android:id="@+id/camera"
+        android:title="Camera"
+        android:icon="@drawable/ic_baseline_photo_camera_24"
+        />
+
+    <item
+        android:id="@+id/internalStorageFragment"
+        android:title="Private Photos"
+        android:icon="@drawable/baseline_photo_24"
+        />
+
+</menu>
