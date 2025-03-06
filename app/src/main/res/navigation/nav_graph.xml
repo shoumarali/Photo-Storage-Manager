@@ -14,4 +14,16 @@
         android:name="com.alishoumar.androidstorage.presentation.ExternalStorageFragment"
         android:label="fragment_external_storage"
         tools:layout="@layout/fragment_external_storage" />
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.alishoumar.androidstorage.presentation.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_cameraFragment_to_externalStorageFragment"
+            app:destination="@id/externalStorageFragment" />
+        <action
+            android:id="@+id/action_cameraFragment_to_internalStorageFragment"
+            app:destination="@id/internalStorageFragment" />
+    </fragment>
 </navigation>

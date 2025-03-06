@@ -8,7 +8,7 @@
         />
 
     <item
-        android:id="@+id/camera"
+        android:id="@+id/cameraFragment"
         android:title="Camera"
         android:icon="@drawable/ic_baseline_photo_camera_24"
         />
