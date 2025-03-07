@@ -1,11 +1,13 @@
 package com.alishoumar.androidstorage.presentation.adapter
 
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.alishoumar.androidstorage.domain.models.InternalStoragePhoto
 import com.alishoumar.androidstorage.databinding.ItemPhotoBinding
 
@@ -65,7 +67,9 @@ class InternalStoragePhotoAdapter(
 
         holder.binding.apply {
 
-            ivPhoto.setImageBitmap(photo.bmp)
+            ivPhoto.load(photo.bmp){
+                crossfade(true)
+            }
 
             val aspectRatio = photo.bmp.width.toFloat() / photo.bmp.height.toFloat()
             ConstraintSet().apply {

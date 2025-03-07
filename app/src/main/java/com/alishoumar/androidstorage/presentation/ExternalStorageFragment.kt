@@ -52,7 +52,7 @@ class ExternalStorageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        itemDecoration = SpaceItemDecoration(6)
+        itemDecoration = SpaceItemDecoration(4)
         externalStoragePhotoAdapter = SharedStoragePhotoAdapter {
             lifecycleScope.launch {
                 deletePhotoFromExternalStorage(it.uri)

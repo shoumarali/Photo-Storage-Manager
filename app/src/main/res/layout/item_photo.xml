@@ -6,14 +6,15 @@
 
     <ImageView
         android:id="@+id/ivPhoto"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="Image"
         android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="9:16"
-        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -40,7 +40,7 @@ class InternalStorageFragment : Fragment() {
         internalStoragePhotoAdapter = InternalStoragePhotoAdapter {
             internalStorageViewModel.deletePhotoFromInternalStorage(it.name)
         }
-        itemDecoration = SpaceItemDecoration(6)
+        itemDecoration = SpaceItemDecoration(4)
         setUpRecyclerView()
         setUpObservables()
     }

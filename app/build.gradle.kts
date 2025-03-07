@@ -72,6 +72,9 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
 
+    //coil
+    implementation(libs.coil)
+
 }
 kapt {
     correctErrorTypes = true

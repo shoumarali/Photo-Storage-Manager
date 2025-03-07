@@ -6,8 +6,11 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.Coil
+import coil.load
 import com.alishoumar.androidstorage.domain.models.ExternalStoragePhoto
 import com.alishoumar.androidstorage.databinding.ItemPhotoBinding
+import com.alishoumar.androidstorage.presentation.adapter.InternalStoragePhotoAdapter.InternalStoragePhotoViewHolder
 
 class SharedStoragePhotoAdapter(
     val onPhotoClick:(ExternalStoragePhoto) -> Unit
@@ -52,7 +55,12 @@ class SharedStoragePhotoAdapter(
         val currentPhoto = currentList[position]
 
         holder.binding.apply {
-            ivPhoto.setImageURI(currentPhoto.uri)
+
+            ivPhoto.load(currentPhoto.uri) {
+                crossfade(true)
+                size(500, 500)
+            }
+
             val aspectRatio = currentPhoto.width.toFloat() / currentPhoto.height.toFloat()
             ConstraintSet().apply {
                 clone(root)
@@ -66,5 +74,7 @@ class SharedStoragePhotoAdapter(
             }
         }
     }
+
+
 
 }

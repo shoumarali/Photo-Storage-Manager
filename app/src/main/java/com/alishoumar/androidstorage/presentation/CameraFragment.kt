@@ -2,8 +2,12 @@ package com.alishoumar.androidstorage.presentation
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +15,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
 import com.alishoumar.androidstorage.databinding.FragmentCameraBinding
+import com.alishoumar.androidstorage.presentation.utils.FileUtils.createFileName
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CameraFragment : Fragment() {
 
 
@@ -23,6 +33,8 @@ class CameraFragment : Fragment() {
 
     private val viewModel: CameraViewModel by viewModels()
     private lateinit var cameraController: LifecycleCameraController
+
+    private var canTakePhoto = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,7 +75,10 @@ class CameraFragment : Fragment() {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
-
+        binding.ibPrivatePhoto.setOnClickListener {
+            createFileName()
+        }
+        binding.ibTakePhoto.isEnabled = canTakePhoto
         binding.ibTakePhoto.setOnClickListener{
             takePhoto()
         }
@@ -77,7 +92,30 @@ class CameraFragment : Fragment() {
     }
 
     private fun takePhoto(){
+        cameraController.takePicture(
+            ContextCompat.getMainExecutor(requireContext()),
+            object : ImageCapture.OnImageCapturedCallback(){
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    super.onCaptureSuccess(image)
+                    canTakePhoto = false
 
+                    viewModel.savePhotoToInternalStorage(
+                        createFileName(),
+                        image,
+                        true
+                        )
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        canTakePhoto = true
+                    },2000)
+                    Toast.makeText(requireContext(),"photo saved", Toast.LENGTH_SHORT).show()
+                }
+                override fun onError(exception: ImageCaptureException) {
+                    super.onError(exception)
+                    Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
     }
 
     private fun switchCamera() {
