@@ -11,12 +11,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
+import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import com.alishoumar.androidstorage.R
 import com.alishoumar.androidstorage.databinding.FragmentCameraBinding
 
 class CameraFragment : Fragment() {
@@ -25,8 +21,8 @@ class CameraFragment : Fragment() {
     private var _binding:FragmentCameraBinding? = null
     private val binding get() = _binding!!
 
-
     private val viewModel: CameraViewModel by viewModels()
+    private lateinit var cameraController: LifecycleCameraController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +47,13 @@ class CameraFragment : Fragment() {
                 }
             }
 
+        cameraController = LifecycleCameraController(
+            requireContext()
+        ).apply {
+            setEnabledUseCases(
+                LifecycleCameraController.IMAGE_CAPTURE or LifecycleCameraController.VIDEO_CAPTURE
+            )
+        }
 
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -59,33 +62,31 @@ class CameraFragment : Fragment() {
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
+
+
+        binding.ibTakePhoto.setOnClickListener{
+            takePhoto()
+        }
+        binding.ibSwitchMode.setOnClickListener {
+            switchCamera()
+        }
     }
     private fun startCamera(){
-        val cameraProviderFuture = ProcessCameraProvider
-            .getInstance(requireContext())
+        binding.cameraPreview.controller = cameraController
+        cameraController.bindToLifecycle(this)
+    }
 
+    private fun takePhoto(){
 
-        cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder().build()
+    }
 
-            preview.surfaceProvider = binding.cameraPreview.surfaceProvider
-
-            val cameraSelector = CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                .build()
-
-            try {
-                cameraProvider.unbindAll()
-                val camera = cameraProvider.bindToLifecycle(
-                    this as LifecycleOwner,
-                    cameraSelector,
-                    preview
-                )
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Error starting camera", Toast.LENGTH_SHORT).show()
-            }
-        }, ContextCompat.getMainExecutor(requireContext()))
-
+    private fun switchCamera() {
+        cameraController.cameraSelector = if (
+            cameraController.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
+            ) {
+            CameraSelector.DEFAULT_FRONT_CAMERA
+        } else {
+            CameraSelector.DEFAULT_BACK_CAMERA
+        }
     }
 }
