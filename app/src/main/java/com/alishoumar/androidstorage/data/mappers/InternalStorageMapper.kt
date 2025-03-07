@@ -11,7 +11,8 @@ fun List<File>.toListInternalStoragePhotos():List<InternalStoragePhoto>{
         val bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.size)
         InternalStoragePhoto(
             name = it.name,
-            bmp =  bitmap
+            bmp =  bitmap,
+            filePath = it.absolutePath
         )
     }
 }

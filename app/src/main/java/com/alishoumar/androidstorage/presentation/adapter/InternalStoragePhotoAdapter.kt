@@ -44,7 +44,7 @@ class InternalStoragePhotoAdapter(
             oldItem: InternalStoragePhoto,
             newItem: InternalStoragePhoto
         ): Boolean {
-            return oldItem.name == newItem.name && oldItem.bmp.sameAs(newItem.bmp)
+            return oldItem.name == newItem.name
         }
 
     }
@@ -67,8 +67,10 @@ class InternalStoragePhotoAdapter(
 
         holder.binding.apply {
 
-            ivPhoto.load(photo.bmp){
+
+            ivPhoto.load(photo.filePath) {
                 crossfade(true)
+                size(500, 500)
             }
 
             val aspectRatio = photo.bmp.width.toFloat() / photo.bmp.height.toFloat()
