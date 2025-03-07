@@ -3,6 +3,8 @@ package com.alishoumar.androidstorage.presentation
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import androidx.camera.core.ImageProxy
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +15,7 @@ import com.alishoumar.androidstorage.domain.usecases.externalStorage.SavePhotoTo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.div
 
@@ -22,8 +25,6 @@ class CameraViewModel @Inject constructor(
     private val savePhotoToExternalStorageUseCase: SavePhotoToExternalStorageUseCase
 ) : ViewModel() {
 
-    private val _privateModeEnabled = MutableLiveData<Boolean>(false)
-    val privateModeEnabled: LiveData<Boolean> = _privateModeEnabled
 
     fun savePhotoToInternalStorage(
         filename:String,
@@ -31,32 +32,47 @@ class CameraViewModel @Inject constructor(
         frontCamera: Boolean
     ){
         viewModelScope.launch(Dispatchers.IO) {
+            savePhotoToInternalStorageUseCase(filename, mirrorImageOrNo(image,frontCamera))
+        }
+    }
+    fun savePhotoToExternalStorage(
+        displayName:String,
+        image: ImageProxy,
+        frontCamera: Boolean
+    ){
+        viewModelScope.launch (Dispatchers.IO){
+            savePhotoToExternalStorageUseCase(
+                getCollection(),
+                displayName,
+                mirrorImageOrNo(image,frontCamera)
+            )
+        }
+    }
+
+    private suspend fun mirrorImageOrNo(
+        image: ImageProxy,
+        frontCamera: Boolean
+    ): Bitmap{
+        return withContext(Dispatchers.IO) {
             var bitmap = image.toBitmap()
 
-            // Mirror image if it's from the front camera
-            bitmap = if (frontCamera) {
+             if (frontCamera) {
                 val matrix = Matrix().apply {
                     postScale(-1f, 1f, bitmap.width / 2f, bitmap.height / 2f)
                 }
-                Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+                return@withContext Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
             } else {
                 bitmap
             }
 
-            savePhotoToInternalStorageUseCase(filename, bitmap)
         }
     }
-    fun savePhotoToExternalStorage(
-        collectionUri: Uri,
-        displayName:String,
-        bitmap: Bitmap
-    ){
-        viewModelScope.launch (Dispatchers.IO){
-            savePhotoToExternalStorageUseCase(
-                collectionUri,
-                displayName,
-                bitmap
-            )
+
+    private fun getCollection(): Uri {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        } else {
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
     }
 }

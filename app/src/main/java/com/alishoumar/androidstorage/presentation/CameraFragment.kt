@@ -2,8 +2,6 @@ package com.alishoumar.androidstorage.presentation
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Matrix
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.os.Handler
@@ -35,6 +33,7 @@ class CameraFragment : Fragment() {
     private lateinit var cameraController: LifecycleCameraController
 
     private var canTakePhoto = true
+    private var savePhotoInInternalStorage = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,12 +75,22 @@ class CameraFragment : Fragment() {
         }
 
         binding.ibPrivatePhoto.setOnClickListener {
-            createFileName()
+
+            savePhotoInInternalStorage= !savePhotoInInternalStorage
+            Toast.makeText(
+                requireContext(),
+                "$savePhotoInInternalStorage",
+                Toast.LENGTH_SHORT
+            ).show()
         }
         binding.ibTakePhoto.isEnabled = canTakePhoto
         binding.ibTakePhoto.setOnClickListener{
             takePhoto()
+            Toast.makeText(requireContext(),
+                "Private mode is : $savePhotoInInternalStorage",
+                Toast.LENGTH_SHORT).show()
         }
+
         binding.ibSwitchMode.setOnClickListener {
             switchCamera()
         }
@@ -99,11 +108,21 @@ class CameraFragment : Fragment() {
                     super.onCaptureSuccess(image)
                     canTakePhoto = false
 
-                    viewModel.savePhotoToInternalStorage(
-                        createFileName(),
-                        image,
-                        true
+                    val frontCameraOrBack = cameraController.cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA
+
+                    if(savePhotoInInternalStorage) {
+                        viewModel.savePhotoToInternalStorage(
+                            createFileName(),
+                            image,
+                            frontCameraOrBack
                         )
+                    }else{
+                        viewModel.savePhotoToExternalStorage(
+                            createFileName(),
+                            image,
+                            frontCameraOrBack
+                        )
+                    }
 
                     Handler(Looper.getMainLooper()).postDelayed({
                         canTakePhoto = true
@@ -117,7 +136,6 @@ class CameraFragment : Fragment() {
             }
         )
     }
-
     private fun switchCamera() {
         cameraController.cameraSelector = if (
             cameraController.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
