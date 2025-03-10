@@ -22,8 +22,14 @@
         <action
             android:id="@+id/action_cameraFragment_to_externalStorageFragment"
             app:destination="@id/externalStorageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/biometricFragment"
+        android:name="com.alishoumar.androidstorage.presentation.BiometricFragment"
+        android:label="fragment_biometric"
+        tools:layout="@layout/fragment_biometric" >
         <action
-            android:id="@+id/action_cameraFragment_to_internalStorageFragment"
+            android:id="@+id/action_biometricFragment_to_internalStorageFragment"
             app:destination="@id/internalStorageFragment" />
     </fragment>
 </navigation>

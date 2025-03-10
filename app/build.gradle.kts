@@ -72,8 +72,11 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
 
-    //coil
+
     implementation(libs.coil)
+    implementation(libs.androidx.biometric)
+
+    implementation(libs.kotlinx.coroutines.core)
 
 }
 kapt {

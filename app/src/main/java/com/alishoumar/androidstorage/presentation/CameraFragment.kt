@@ -145,4 +145,9 @@ class CameraFragment : Fragment() {
             CameraSelector.DEFAULT_BACK_CAMERA
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraController.unbind()
+    }
 }
