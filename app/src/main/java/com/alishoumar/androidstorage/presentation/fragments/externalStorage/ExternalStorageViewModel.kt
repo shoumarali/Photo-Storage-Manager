@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.presentation
+package com.alishoumar.androidstorage.presentation.fragments.externalStorage
 
 import android.content.IntentSender
 import android.graphics.Bitmap
@@ -16,7 +16,6 @@ import com.alishoumar.androidstorage.domain.usecases.externalStorage.SavePhotoTo
 import com.alishoumar.androidstorage.domain.usecases.permissions.GetUnGrantedPermissionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

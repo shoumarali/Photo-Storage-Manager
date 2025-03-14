@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.presentation
+package com.alishoumar.androidstorage.presentation.fragments.Camera
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -6,8 +6,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.camera.core.ImageProxy
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alishoumar.androidstorage.domain.usecases.InternalStorage.SavePhotoInternalStorageUseCase
@@ -17,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.div
 
 @HiltViewModel
 class CameraViewModel @Inject constructor(

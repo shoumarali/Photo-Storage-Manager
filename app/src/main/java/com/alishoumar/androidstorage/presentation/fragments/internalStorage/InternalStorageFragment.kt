@@ -1,16 +1,20 @@
-package com.alishoumar.androidstorage.presentation
+package com.alishoumar.androidstorage.presentation.fragments.internalStorage
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.alishoumar.androidstorage.R
 import com.alishoumar.androidstorage.databinding.FragmentInternalStorageBinding
 import com.alishoumar.androidstorage.presentation.adapter.InternalStoragePhotoAdapter
 import com.alishoumar.androidstorage.presentation.adapter.SpaceItemDecoration
+import com.alishoumar.androidstorage.presentation.fragments.shared.AuthSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -24,6 +28,9 @@ class InternalStorageFragment : Fragment() {
     private lateinit var internalStoragePhotoAdapter: InternalStoragePhotoAdapter
     private lateinit var itemDecoration : SpaceItemDecoration
     private val internalStorageViewModel: InternalStorageViewModel by viewModels()
+    private val authSharedViewModel: AuthSharedViewModel by activityViewModels()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,12 +44,17 @@ class InternalStorageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        internalStoragePhotoAdapter = InternalStoragePhotoAdapter {
-            internalStorageViewModel.deletePhotoFromInternalStorage(it.name)
+        authSharedViewModel.isAuthenticated.observe(viewLifecycleOwner) {
+            if (!it) {
+                findNavController().navigate(R.id.action_internalStorageFragment_to_biometricFragment)
+            }
+            internalStoragePhotoAdapter = InternalStoragePhotoAdapter {
+                internalStorageViewModel.deletePhotoFromInternalStorage(it.name)
+            }
+            itemDecoration = SpaceItemDecoration(4)
+            setUpRecyclerView()
+            setUpObservables()
         }
-        itemDecoration = SpaceItemDecoration(4)
-        setUpRecyclerView()
-        setUpObservables()
     }
 
     private fun setUpRecyclerView(){

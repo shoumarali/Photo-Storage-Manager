@@ -14,7 +14,7 @@
         />
 
     <item
-        android:id="@+id/biometricFragment"
+        android:id="@+id/internalStorageFragment"
         android:title="Private Photos"
         android:icon="@drawable/baseline_photo_24"
         />

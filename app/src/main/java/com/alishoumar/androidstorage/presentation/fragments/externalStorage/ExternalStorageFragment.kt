@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.presentation
+package com.alishoumar.androidstorage.presentation.fragments.externalStorage
 
 import android.database.ContentObserver
 import android.net.Uri

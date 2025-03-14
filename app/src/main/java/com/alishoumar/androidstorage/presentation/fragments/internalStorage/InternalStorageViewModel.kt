@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.presentation
+package com.alishoumar.androidstorage.presentation.fragments.internalStorage
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
@@ -9,7 +9,6 @@ import com.alishoumar.androidstorage.domain.models.InternalStoragePhoto
 import com.alishoumar.androidstorage.domain.usecases.InternalStorage.InternalStorageUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

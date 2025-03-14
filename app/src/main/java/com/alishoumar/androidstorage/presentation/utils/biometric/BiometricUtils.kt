@@ -7,7 +7,6 @@ import android.os.Build
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.channels.Channel
 
 class BiometricUtils (
     private val context: Context
@@ -16,7 +15,7 @@ class BiometricUtils (
         title: String,
         description: String,
         fragment: Fragment,
-        resultChannel: Channel<BiometricResult>
+        sendBiometricResult: (BiometricResult) -> Unit
     ){
 
         val manager = BiometricManager.from(context)
@@ -25,44 +24,48 @@ class BiometricUtils (
             .Builder()
             .setTitle(title)
             .setDescription(description)
-            .setAllowedAuthenticators(getAuthenticationTypes())
 
-        if (Build.VERSION.SDK_INT < 30){
-            promptInfo.setNegativeButtonText("Cancel");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            promptInfo.setAllowedAuthenticators(getAuthenticationTypes())
+        } else {
+            promptInfo.setNegativeButtonText("Cancel")
         }
 
         when(manager.canAuthenticate(getAuthenticationTypes())){
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->{
-                resultChannel.trySend(BiometricResult.HardwareUnavailable)
+                sendBiometricResult(BiometricResult.HardwareUnavailable)
                 return
             }
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
-                resultChannel.trySend(BiometricResult.FeatureUnavailable)
+                sendBiometricResult(BiometricResult.FeatureUnavailable)
                 return
             }
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED ->{
-                resultChannel.trySend(BiometricResult.AuthenticationNotSet)
+                sendBiometricResult(BiometricResult.AuthenticationNotSet)
                 return
             }
             else -> Unit
         }
 
+        val activity = fragment.activity ?: return
+
         val prompt = BiometricPrompt(
-            fragment,
+            activity,
             object : BiometricPrompt.AuthenticationCallback(){
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
-                    resultChannel.trySend(BiometricResult.AuthenticationError(errString.toString()))
+                    sendBiometricResult(BiometricResult.AuthenticationError(errString.toString()))
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
-                    resultChannel.trySend(BiometricResult.AuthenticationFailed)
+                    sendBiometricResult(BiometricResult.AuthenticationFailed)
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    resultChannel.trySend(BiometricResult.AuthenticationSuccess)
+                    sendBiometricResult(BiometricResult.AuthenticationSuccess)
                 }
             }
         )

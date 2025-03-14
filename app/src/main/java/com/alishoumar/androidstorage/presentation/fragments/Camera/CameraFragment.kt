@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.presentation
+package com.alishoumar.androidstorage.presentation.fragments.Camera
 
 import android.Manifest
 import android.content.pm.PackageManager
