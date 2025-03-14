@@ -1,11 +1,10 @@
 package com.alishoumar.androidstorage.presentation.fragments.Biometric
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -55,6 +54,14 @@ class BiometricFragment : Fragment() {
             viewModel.biometricFlow.collect { result ->
                 when (result) {
                     is BiometricResult.AuthenticationSuccess -> {
+
+                        binding.tvBiometric.text = "Authentication successful! Redirecting..."
+                        binding.tvBiometric.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.success_green
+                            )
+                        )
                         authSharedViewModel.setAuthentication(true)
 
                         findNavController().navigate(
@@ -62,26 +69,57 @@ class BiometricFragment : Fragment() {
                             null,
                             NavOptions.Builder()
                                 .setPopUpTo(R.id.biometricFragment, true)
-                                .build())
+                                .build()
+                        )
                     }
+
                     is BiometricResult.AuthenticationError -> {
-                        showToast("Not recognized")
                         println(result.error)
                     }
-                    is BiometricResult.FeatureUnavailable -> showToast("Please enable biometrics in your device")
-                    is BiometricResult.HardwareUnavailable -> showToast("Hardware unavailable")
-                    is BiometricResult.AuthenticationNotSet -> showToast("Set Authentication")
-                    else -> Toast.makeText(requireContext(),"something went wrong", Toast.LENGTH_SHORT).show()
+
+                    is BiometricResult.FeatureUnavailable -> {
+                        binding.tvBiometric.text =
+                            "Your device does not support biometric authentication."
+                        binding.tvBiometric.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.error_red
+                            )
+                        )
+                    }
+
+                    is BiometricResult.HardwareUnavailable -> {
+                        binding.tvBiometric.text = "Biometric hardware is currently unavailable."
+                        binding.tvBiometric.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.error_red
+                            )
+                        )
+                    }
+
+                    is BiometricResult.AuthenticationNotSet -> {
+                        binding.tvBiometric.text =
+                            "No biometrics enrolled. Please set up biometrics in your device settings."
+                        binding.tvBiometric.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.warning_yellow
+                            )
+                        )
+                    }
+
+                    is BiometricResult.AuthenticationFailed -> {
+                        binding.tvBiometric.text = "Authentication failed. Please try again."
+                        binding.tvBiometric.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.error_red
+                            )
+                        )
+                    }
                 }
             }
         }
-    }
-
-
-    
-    private fun showToast(
-        str: String
-    ){
-        Toast.makeText(requireContext(),str, Toast.LENGTH_SHORT).show()
     }
 }
