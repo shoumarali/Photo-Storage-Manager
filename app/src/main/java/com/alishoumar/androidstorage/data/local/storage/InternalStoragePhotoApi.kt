@@ -3,18 +3,26 @@ package com.alishoumar.androidstorage.data.local.storage
 import android.app.Application
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
+import com.alishoumar.androidstorage.data.utils.CryptoManager
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 
 class InternalStoragePhotoApi (
-   @ApplicationContext private val application: Application
+   @ApplicationContext private val application: Application,
+    private val cryptoManager: CryptoManager
 ) {
      fun savePhoto(fileName: String, bmp: Bitmap) {
-        application.openFileOutput("$fileName.jpg", MODE_PRIVATE).use { stream ->
-            if (!bmp.compress(Bitmap.CompressFormat.JPEG, 95, stream)) {
-                throw IOException("Couldn't save bitmap")
-            }
+
+         val byteArrayOutputStream = ByteArrayOutputStream()
+         if (!bmp.compress(Bitmap.CompressFormat.JPEG, 95, byteArrayOutputStream)) {
+             throw IOException("Couldn't save bitmap")
+         }
+         val imagesBytes= byteArrayOutputStream.toByteArray()
+
+        application.openFileOutput("$fileName.enc", MODE_PRIVATE).use { outputStream ->
+            cryptoManager.encrypt(imagesBytes, outputStream)
         }
     }
 

@@ -3,6 +3,7 @@ package com.alishoumar.androidstorage.di
 import android.app.Application
 import com.alishoumar.androidstorage.data.local.storage.ExternalStoragePhotoApi
 import com.alishoumar.androidstorage.data.local.storage.InternalStoragePhotoApi
+import com.alishoumar.androidstorage.data.utils.CryptoManager
 import com.alishoumar.androidstorage.domain.repository.ExternalStorageRepository
 import com.alishoumar.androidstorage.domain.repository.InternalStorageRepository
 import com.alishoumar.androidstorage.domain.usecases.InternalStorage.InternalStorageUseCases
@@ -24,10 +25,20 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+
     @Singleton
     @Provides
-    fun provideInternalStorageApi(application: Application):InternalStoragePhotoApi {
-        return InternalStoragePhotoApi(application = application)
+    fun provideCryptoManager(): CryptoManager{
+        return CryptoManager()
+    }
+
+    @Singleton
+    @Provides
+    fun provideInternalStorageApi(
+        application: Application,
+        cryptoManager: CryptoManager
+    ):InternalStoragePhotoApi {
+        return InternalStoragePhotoApi(application = application, cryptoManager)
     }
 
     @Singleton
