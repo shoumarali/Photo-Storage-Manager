@@ -112,7 +112,11 @@ class CameraFragment : Fragment() {
 
                     if(savePhotoInInternalStorage) {
                         viewModel.savePhotoToInternalStorage(
-                            createFileName(),
+                            createFileName(
+                                isSavingEncrypted = true,
+                                width = image.width,
+                                height = image.height
+                            ),
                             image,
                             frontCameraOrBack
                         )

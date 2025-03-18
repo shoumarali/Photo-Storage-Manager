@@ -7,9 +7,13 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
 import coil.load
+import com.alishoumar.androidstorage.data.utils.CryptoManager
 import com.alishoumar.androidstorage.domain.models.InternalStoragePhoto
 import com.alishoumar.androidstorage.databinding.ItemPhotoBinding
+import com.alishoumar.androidstorage.presentation.adapter.fetcher.EncryptedImageFetcher
+import com.alishoumar.androidstorage.presentation.adapter.fetcher.EncryptedImageFetcherFactory
 
 /*
 list adapter is just extension of RecyclerView.Adapter it computes diffs between list on background
@@ -22,6 +26,7 @@ performance will be better
 
 
 class InternalStoragePhotoAdapter(
+    private val cryptoManager: CryptoManager,
     private val onPhotoClick : (internalPhoto : InternalStoragePhoto) -> Unit
 ) : ListAdapter<InternalStoragePhoto, InternalStoragePhotoAdapter.InternalStoragePhotoViewHolder>(
     Companion
@@ -65,20 +70,29 @@ class InternalStoragePhotoAdapter(
     override fun onBindViewHolder(holder: InternalStoragePhotoViewHolder, position: Int) {
         val photo = currentList[position]
 
+
+        val imageLoader = ImageLoader.Builder(holder.itemView.context)
+            .components {
+                add(EncryptedImageFetcherFactory(
+                    cryptoManager,
+                    holder.itemView.context))
+            }.build()
+
+
         holder.binding.apply {
 
 
-            ivPhoto.load(photo.filePath) {
+            ivPhoto.load(photo.filePath, imageLoader) {
                 crossfade(true)
                 size(500, 500)
             }
 
-            val aspectRatio = photo.bmp.width.toFloat() / photo.bmp.height.toFloat()
-            ConstraintSet().apply {
-                clone(root)
-                setDimensionRatio(ivPhoto.id, aspectRatio.toString())
-                applyTo(root)
-            }
+//            val aspectRatio = photo.bmp.width.toFloat() / photo.bmp.height.toFloat()
+//            ConstraintSet().apply {
+//                clone(root)
+//                setDimensionRatio(ivPhoto.id, aspectRatio.toString())
+//                applyTo(root)
+//            }
 
             ivPhoto.setOnLongClickListener{
                 onPhotoClick(photo)

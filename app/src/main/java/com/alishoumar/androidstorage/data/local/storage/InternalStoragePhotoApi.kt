@@ -28,7 +28,7 @@ class InternalStoragePhotoApi (
 
     fun loadPhotos() :List<File> {
         val files = application.filesDir.listFiles()
-        return files?.filter { it.canRead() && it.isFile && it.name.endsWith(".jpg") }?: listOf()
+        return files?.filter { it.canRead() && it.isFile && it.name.endsWith(".enc") }?: listOf()
     }
 
     fun deletePhoto(fileName: String){
