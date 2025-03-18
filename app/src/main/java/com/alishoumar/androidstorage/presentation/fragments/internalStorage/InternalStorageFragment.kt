@@ -74,7 +74,7 @@ class InternalStorageFragment : Fragment() {
 
     private fun setUpObservables(){
         internalStorageViewModel.internalPhotos.observe(viewLifecycleOwner) {
-//            internalStoragePhotoAdapter.submitList(it)
+            internalStoragePhotoAdapter.submitList(it)
             Log.d("tag", "setUpObservables: $it")
 
         }

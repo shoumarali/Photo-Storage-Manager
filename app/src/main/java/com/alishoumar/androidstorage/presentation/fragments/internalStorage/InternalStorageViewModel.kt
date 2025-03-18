@@ -1,6 +1,7 @@
 package com.alishoumar.androidstorage.presentation.fragments.internalStorage
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

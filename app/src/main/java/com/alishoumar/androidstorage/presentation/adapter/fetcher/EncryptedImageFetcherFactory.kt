@@ -2,9 +2,7 @@ package com.alishoumar.androidstorage.presentation.adapter.fetcher
 
 import android.content.Context
 import coil.ImageLoader
-import coil.decode.Decoder
 import coil.fetch.Fetcher
-import coil.fetch.SourceResult
 import coil.request.Options
 import com.alishoumar.androidstorage.data.utils.CryptoManager
 import java.io.File

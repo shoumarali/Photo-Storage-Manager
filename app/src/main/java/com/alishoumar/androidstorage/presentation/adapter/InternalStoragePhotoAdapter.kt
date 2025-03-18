@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.load
+import coil.request.CachePolicy
 import com.alishoumar.androidstorage.data.utils.CryptoManager
 import com.alishoumar.androidstorage.domain.models.InternalStoragePhoto
 import com.alishoumar.androidstorage.databinding.ItemPhotoBinding
@@ -76,7 +77,8 @@ class InternalStoragePhotoAdapter(
                 add(EncryptedImageFetcherFactory(
                     cryptoManager,
                     holder.itemView.context))
-            }.build()
+            }
+            .build()
 
 
         holder.binding.apply {
@@ -85,14 +87,18 @@ class InternalStoragePhotoAdapter(
             ivPhoto.load(photo.filePath, imageLoader) {
                 crossfade(true)
                 size(500, 500)
+                diskCachePolicy(CachePolicy.ENABLED)
+                memoryCachePolicy(CachePolicy.ENABLED)
             }
 
-//            val aspectRatio = photo.bmp.width.toFloat() / photo.bmp.height.toFloat()
-//            ConstraintSet().apply {
-//                clone(root)
-//                setDimensionRatio(ivPhoto.id, aspectRatio.toString())
-//                applyTo(root)
-//            }
+            val photoWidthAndHeight = photo.name.split("#")[1].split("x")
+
+            val aspectRatio = photoWidthAndHeight[0].toFloat() / photoWidthAndHeight[1].removeSuffix(".enc").toFloat()
+            ConstraintSet().apply {
+                clone(root)
+                setDimensionRatio(ivPhoto.id, aspectRatio.toString())
+                applyTo(root)
+            }
 
             ivPhoto.setOnLongClickListener{
                 onPhotoClick(photo)

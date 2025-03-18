@@ -7,11 +7,10 @@ import java.io.File
 
 fun List<File>.toListInternalStoragePhotos():List<InternalStoragePhoto>{
     return this.map {
-        val bytes = it.readBytes()
-        val bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.size)
+//        val bytes = it.readBytes()
+//        val bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.size)
         InternalStoragePhoto(
             name = it.name,
-            bmp =  bitmap,
             filePath = it.absolutePath
         )
     }

@@ -2,6 +2,7 @@ package com.alishoumar.androidstorage.presentation.adapter.fetcher
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.util.Log
 import coil.decode.DataSource
 import coil.fetch.DrawableResult
 import coil.fetch.FetchResult
@@ -21,10 +22,13 @@ class EncryptedImageFetcher (
 
     override suspend fun fetch(): FetchResult? {
         return withContext(Dispatchers.IO) {
+
+
             val encryptStream = file.inputStream()
             val decryptedBytes = cryptoManager.decrypt(encryptStream)
             val bitmap = BitmapFactory.decodeByteArray(decryptedBytes, 0, decryptedBytes.size)
                 ?: return@withContext null
+
 
              DrawableResult(
                 drawable = bitmap.toDrawable(context.resources),
