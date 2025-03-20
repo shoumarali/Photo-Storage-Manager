@@ -15,8 +15,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.alishoumar.androidstorage.R
 import com.alishoumar.androidstorage.databinding.FragmentExternalStorageBinding
 import com.alishoumar.androidstorage.presentation.adapter.SharedStoragePhotoAdapter
 import com.alishoumar.androidstorage.presentation.adapter.SpaceItemDecoration
@@ -50,11 +52,22 @@ class ExternalStorageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         itemDecoration = SpaceItemDecoration(4)
-        externalStoragePhotoAdapter = SharedStoragePhotoAdapter {
-            lifecycleScope.launch {
-                deletePhotoFromExternalStorage(it.uri)
-                deletedPhotoUri = it.uri
+        externalStoragePhotoAdapter = SharedStoragePhotoAdapter (
+            onPhotoClick = {
+                lifecycleScope.launch {
+                    deletePhotoFromExternalStorage(it.uri)
+                    deletedPhotoUri = it.uri
+                }
             }
+        ){
+            val bundle = Bundle().apply {
+                putString("photoUri", it)  // Put the URI as a String
+            }
+
+            findNavController().navigate(
+                R.id.action_externalStorageFragment_to_imageFragment,
+                bundle
+            )
         }
 
         intentSenderLauncher =registerForActivityResult(

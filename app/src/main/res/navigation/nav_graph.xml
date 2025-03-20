@@ -12,21 +12,24 @@
         <action
             android:id="@+id/action_internalStorageFragment_to_biometricFragment"
             app:destination="@id/biometricFragment" />
+        <action
+            android:id="@+id/action_internalStorageFragment_to_imageFragment"
+            app:destination="@id/imageFragment" />
     </fragment>
     <fragment
         android:id="@+id/externalStorageFragment"
         android:name="com.alishoumar.androidstorage.presentation.fragments.externalStorage.ExternalStorageFragment"
         android:label="fragment_external_storage"
-        tools:layout="@layout/fragment_external_storage" />
+        tools:layout="@layout/fragment_external_storage" >
+        <action
+            android:id="@+id/action_externalStorageFragment_to_imageFragment"
+            app:destination="@id/imageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.alishoumar.androidstorage.presentation.fragments.Camera.CameraFragment"
         android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" >
-        <action
-            android:id="@+id/action_cameraFragment_to_externalStorageFragment"
-            app:destination="@id/externalStorageFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_camera" />
     <fragment
         android:id="@+id/biometricFragment"
         android:name="com.alishoumar.androidstorage.presentation.fragments.Biometric.BiometricFragment"
@@ -36,4 +39,9 @@
             android:id="@+id/action_biometricFragment_to_internalStorageFragment"
             app:destination="@id/internalStorageFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="com.alishoumar.androidstorage.presentation.fragments.Image.ImageFragment"
+        android:label="fragment_image"
+        tools:layout="@layout/fragment_image" />
 </navigation>

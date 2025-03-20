@@ -3,6 +3,8 @@ package com.alishoumar.androidstorage.presentation.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +15,8 @@ import com.alishoumar.androidstorage.databinding.ItemPhotoBinding
 import com.alishoumar.androidstorage.presentation.adapter.InternalStoragePhotoAdapter.InternalStoragePhotoViewHolder
 
 class SharedStoragePhotoAdapter(
-    val onPhotoClick:(ExternalStoragePhoto) -> Unit
+    val onPhotoClick:(ExternalStoragePhoto) -> Unit,
+    val onImageClick:(ExternalStoragePhoto) -> Unit
 ) : ListAdapter<ExternalStoragePhoto, SharedStoragePhotoAdapter.SharedStoragePhotoViewHolder>(
     Companion
 ) {
@@ -70,6 +73,11 @@ class SharedStoragePhotoAdapter(
 
             ivPhoto.setOnLongClickListener {
                 onPhotoClick(currentPhoto)
+                true
+            }
+
+            ivPhoto.setOnClickListener {
+                onImageClick(currentPhoto)
                 true
             }
         }
