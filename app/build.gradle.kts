@@ -78,6 +78,9 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.core)
 
+    //photoView
+    implementation(libs.photoview)
+
 }
 kapt {
     correctErrorTypes = true

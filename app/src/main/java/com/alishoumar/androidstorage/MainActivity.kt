@@ -1,6 +1,7 @@
 package com.alishoumar.androidstorage
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -28,33 +29,15 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
-
-//        ViewCompat.setOnApplyWindowInsetsListener(binding.root){v , insets->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
-
-
-
-//        val takePhoto = registerForActivityResult(
-//            contract = ActivityResultContracts.TakePicturePreview(),
-//            callback = {
-//                lifecycleScope.launch {
-//                    if(binding.switchPrivate.isChecked){
-//                        internalStorageViewModel.savePhotoToInternalStorage(
-//                            UUID.randomUUID().toString(),
-//                            it!!)
-//                    }else{
-//                        externalStorageViewModel.savePhotoToExternalStorage(
-//                            UUID.randomUUID().toString(), it!!
-//                        )
-//                    }
-//                }
-//            }
-//        )
-//        binding.btnTakePhoto.setOnClickListener {
-//            takePhoto.launch()
-//        }
+        navController.addOnDestinationChangedListener { _,destination,_ ->
+            when(destination.id) {
+                R.id.imageFragment -> {
+                    binding.bottomNavigationView.visibility = View.GONE
+                }
+                else -> {
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 }

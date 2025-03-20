@@ -61,7 +61,7 @@ class ExternalStorageFragment : Fragment() {
             }
         ){
             val bundle = Bundle().apply {
-                putString("photoUri", it)  // Put the URI as a String
+                putParcelable("photo",it)
             }
 
             findNavController().navigate(

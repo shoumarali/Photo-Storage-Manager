@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import coil.load
 import com.alishoumar.androidstorage.databinding.FragmentImageBinding
+import com.alishoumar.androidstorage.domain.models.ExternalStoragePhoto
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,5 +28,11 @@ class ImageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val photo = arguments?.getParcelable<ExternalStoragePhoto>("photo")
+        if (photo != null) {
+            binding.ivOpenedImage.load(photo.uri) {
+                crossfade(true)
+            }
+        }
     }
 }
