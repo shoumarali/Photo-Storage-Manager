@@ -1,6 +1,7 @@
 package com.alishoumar.androidstorage.presentation.fragments.Image
 
 import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -82,6 +83,14 @@ class ImageFragment : Fragment() {
             lifecycleScope.launch {
                 deletePhotoFromExternalStorage(photo?.uri!!)
                 deletedPhotoUri = photo.uri
+            }
+        }
+
+        binding.ibSharePhoto.setOnClickListener {
+            Intent(Intent.ACTION_SEND).also {
+                it.type = "image/*"
+                it.putExtra(Intent.EXTRA_STREAM,photo?.uri)
+                startActivity(it)
             }
         }
 
