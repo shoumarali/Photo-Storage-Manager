@@ -86,7 +86,7 @@ class InternalStoragePhotoAdapter(
 
             ivPhoto.load(photo.filePath, imageLoader) {
                 crossfade(true)
-                size(500, 500)
+                size(344, 344)
                 diskCachePolicy(CachePolicy.ENABLED)
                 memoryCachePolicy(CachePolicy.ENABLED)
             }

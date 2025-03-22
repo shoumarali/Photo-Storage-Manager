@@ -52,7 +52,9 @@ class ExternalStorageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         itemDecoration = SpaceItemDecoration(4)
+
         externalStoragePhotoAdapter = SharedStoragePhotoAdapter (
+            viewLifecycleOwner,
             onPhotoClick = {
                 lifecycleScope.launch {
                     deletePhotoFromExternalStorage(it.uri)
@@ -97,7 +99,7 @@ class ExternalStorageFragment : Fragment() {
             adapter = externalStoragePhotoAdapter
             layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
             addItemDecoration(itemDecoration)
-
+            setHasFixedSize(true)
         }
     }
 
@@ -107,8 +109,10 @@ class ExternalStorageFragment : Fragment() {
                 registerPermissions.launch(it.toTypedArray())
         }
 
-        externalStorageViewModel.externalStoragePhotos.observe(viewLifecycleOwner){
-            externalStoragePhotoAdapter.submitList(it)
+        externalStorageViewModel.externalStoragePhotos.observe(viewLifecycleOwner) { newList ->
+            if (externalStoragePhotoAdapter.currentList != newList) {
+                externalStoragePhotoAdapter.submitList(newList)
+            }
         }
     }
 

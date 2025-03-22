@@ -14,6 +14,9 @@ data class ExternalStoragePhoto(
     val uri: Uri
 ) : Parcelable {
 
+    val aspectRatio: Float
+        get() = width.toFloat() / height.toFloat()
+
     constructor(parcel: Parcel): this(
         parcel.readLong(),
         parcel.readString() ?: "",

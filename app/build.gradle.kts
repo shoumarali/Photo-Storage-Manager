@@ -81,6 +81,8 @@ dependencies {
     //photoView
     implementation(libs.photoview)
 
+    implementation(libs.rootbeer.lib)
+
 }
 kapt {
     correctErrorTypes = true

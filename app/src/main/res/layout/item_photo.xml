@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/ivPhoto"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
         android:contentDescription="Image"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1:1"
