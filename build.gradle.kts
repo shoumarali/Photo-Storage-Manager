@@ -5,12 +5,6 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.55" apply false
 }
 
-//allprojects {
-//    repositories {
-//        maven { url= uri("https://www.jitpack.io") }
-//    }
-//}
-
 buildscript {
     repositories {
         mavenCentral()
