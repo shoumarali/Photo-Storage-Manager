@@ -1,9 +1,13 @@
 cmake_minimum_required(VERSION 3.31.6)
 
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+file(GLOB SOURCES src/*.cpp)
+
 add_library(
         root_checker
         SHARED
-        root_checker.cpp
+        ${SOURCES}
 )
 
 find_library(
