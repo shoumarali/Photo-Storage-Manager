@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.alishoumar.androidstorage.databinding.ActivityMainBinding
-import com.scottyab.rootbeer.RootBeer
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,10 +50,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun isDeviceRooted(): Boolean {
-        return RootBeer(this).isRooted
     }
 
     private external fun isDeviceRootedNative(): Boolean

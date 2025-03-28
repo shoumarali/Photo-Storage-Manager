@@ -31,7 +31,6 @@ jboolean isRootedUsingRootBeerChecker(JNIEnv *env, jobject context){
     }
 
     jobject rootBeerInstance = env->NewObject(rootBeerClass, constructor, context);
-    env->DeleteLocalRef(context);
     if (rootBeerInstance == nullptr) {
         LOGE("Failed to create RootBeer instance");
         env->DeleteLocalRef(rootBeerClass);

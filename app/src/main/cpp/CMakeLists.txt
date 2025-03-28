@@ -1,8 +1,15 @@
 cmake_minimum_required(VERSION 3.31.6)
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/src
+)
 
-file(GLOB SOURCES src/*.cpp)
+set(SOURCES
+        src/root_checker.cpp
+        src/root_beer_checker.cpp
+        src/native_root_checker.cpp
+)
 
 add_library(
         root_checker
