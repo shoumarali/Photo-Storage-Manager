@@ -1,0 +1,6 @@
+[submodule "app/src/main/cpp/external/selinux"]
+	path = app/src/main/cpp/external/selinux
+	url = https://github.com/SELinuxProject/selinux.git
+[submodule "app/src/main/cpp/external/pcre2"]
+	path = app/src/main/cpp/external/pcre2
+	url = https://github.com/PhilipHazel/pcre2.git

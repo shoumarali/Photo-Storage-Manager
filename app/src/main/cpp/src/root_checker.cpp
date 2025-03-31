@@ -6,6 +6,7 @@
 #include "log_utils.h"
 #include "root_beer_checker.h"
 #include "native_root_checker.h"
+#include "native_system_integrity_verifier.h"
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative(JNIEnv *env, jobject thiz){
@@ -35,6 +36,7 @@ Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative(JNIEnv *env
 
     jboolean isRooted = isRootedUsingRootBeerChecker(env, context);
     jboolean isRootedNative = isRootedUsingNativeChecks();
+    jboolean isSystemModded = isSystemModified();
 
-    return  isRooted || isRootedNative;
+    return  isRooted || isRootedNative || isSystemModded;
 }
