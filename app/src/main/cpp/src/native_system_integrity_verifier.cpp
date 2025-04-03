@@ -5,15 +5,21 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "sys/system_properties.h"
 #include "native_system_integrity_verifier.h"
 #include "log_utils.h"
 
+
+
+
 jboolean doWritableSystemPartitionsExist();
 jboolean isBootPartitionModified();
+jboolean isDebuggableBuild();
+jboolean isDeveloperModeEnabled();
 //jboolean isSELinuxEnforcing();
 
 jboolean isSystemModified(){
-    return doWritableSystemPartitionsExist() || isBootPartitionModified();
+    return isDeveloperModeEnabled();
 }
 
 jboolean doWritableSystemPartitionsExist(){
@@ -53,6 +59,40 @@ jboolean isBootPartitionModified() {
     }
     return JNI_FALSE;
 }
+
+#include <unistd.h>
+
+jboolean isDeveloperModeEnabled() {
+    // Check if the adb binary is accessible
+    if (access("/system/bin/adb", F_OK) == 0) {
+        LOGE("adb is accessible.");
+        return JNI_TRUE; // Developer mode is likely enabled
+    } else {
+        LOGE("adb is not accessible.");
+        return JNI_FALSE; // Developer mode is not enabled
+    }
+}
+
+
+
+jboolean isDebuggableBuild() {
+    char buildType[PROP_VALUE_MAX];
+    __system_property_get("ro.build.type", buildType);
+
+    // Log the build type to see what it actually is
+    LOGE("Build Type: %s", buildType);
+
+    // Check if the build type is 'eng' or 'userdebug'
+    if (strcmp(buildType, "eng") == 0 || strcmp(buildType, "userdebug") == 0) {
+        LOGE("Device is running a debuggable build.");
+        return JNI_TRUE;
+    } else {
+        LOGE("Device is not running a debuggable build.");
+        return JNI_FALSE;
+    }
+}
+
+
 
 //jboolean isSELinuxEnforcing() {
 //    const char* path = "/sys/fs/selinux/enforce";

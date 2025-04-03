@@ -3,6 +3,7 @@
 //
 
 #include <jni.h>
+#include <chrono>
 #include "log_utils.h"
 #include "root_beer_checker.h"
 #include "native_root_checker.h"
@@ -10,6 +11,9 @@
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative(JNIEnv *env, jobject thiz){
+
+    auto start_time = std::chrono::high_resolution_clock::now();
+    LOGI("🚀 [Root Check] Started");
 
     jclass activityClass = env->GetObjectClass(thiz);
     if (activityClass == nullptr) {
@@ -34,9 +38,16 @@ Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative(JNIEnv *env
         return JNI_FALSE;
     }
 
-    jboolean isRooted = isRootedUsingRootBeerChecker(env, context);
+    jboolean isRootedUsingRootBeer = isRootedUsingRootBeerChecker(env, context);
     jboolean isRootedNative = isRootedUsingNativeChecks();
     jboolean isSystemModded = isSystemModified();
+    jboolean isRooted = isRootedUsingRootBeer || isRootedNative || isSystemModded;
 
-    return  isRooted || isRootedNative || isSystemModded;
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+    LOGI("✅ [Root Check] Completed in %lld ms | Status: %s",
+         duration,
+         isRooted ? "UNSAFE (root detected)" : "SAFE");
+
+    return  isRooted;
 }

@@ -7,7 +7,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include_directories(
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/src
 )
 
 set(SOURCES
@@ -17,20 +16,12 @@ set(SOURCES
         src/native_system_integrity_verifier.cpp
 )
 
-add_library(
-        root_checker
-        SHARED
-        ${SOURCES}
-)
 
-find_library(
-        log_lib
-        log
-)
+add_library(root_checker SHARED ${SOURCES})
 
-target_link_libraries(
-        root_checker
-        PRIVATE
+find_library(log_lib log)
+
+target_link_libraries(root_checker PRIVATE
         ${log_lib}
 )
 
