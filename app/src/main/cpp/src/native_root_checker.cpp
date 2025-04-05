@@ -52,6 +52,18 @@ jboolean isRootedUsingNativeChecks() {
     return JNI_FALSE;
 }
 
+/**
+ * @brief Checks for common superuser binaries
+ * @return JNI_TRUE if any known SU binary path exists, JNI_FALSE otherwise
+ *
+ * @details Scans filesystem for binaries at:
+ *          - Standard locations (/system/bin, /system/xbin)
+ *          - Common alternative install paths
+ *          - Temporary directories
+ *          - Hidden paths (/.ext/.su)
+ *
+ * @note Also checks executable permissions where applicable
+ */
 jboolean doSuperUserBinariesExist() {
     const char* paths[] = {
             "/system/bin/su",
@@ -78,6 +90,17 @@ jboolean doSuperUserBinariesExist() {
     return JNI_FALSE;
 }
 
+/**
+ * @brief Detects BusyBox installations
+ * @return JNI_TRUE if BusyBox binary found, JNI_FALSE otherwise
+ *
+ * @details Checks common BusyBox locations:
+ *          - System binaries directories
+ *          - Development paths
+ *          - Temporary install locations
+ *
+ * @note BusyBox alone doesn't guarantee root but often co-exists
+ */
 jboolean doBusyBoxBinariesExist() {
     const char* busybox_binaries[] = {
             "/system/xbin/busybox",
@@ -98,6 +121,16 @@ jboolean doBusyBoxBinariesExist() {
     return JNI_FALSE;
 }
 
+/**
+ * @brief Scans for root management apps
+ * @return JNI_TRUE if known root apps detected, JNI_FALSE otherwise
+ *
+ * @details Checks for:
+ *          - Superuser.apk
+ *          - SuperSU.apk
+ *          - Magisk and its variants
+ *          - Both system and data partitions
+ */
 jboolean doSuperUserAppsExist() {
     const char* su_apps[] = {
             "/system/app/Superuser.apk",
@@ -118,6 +151,18 @@ jboolean doSuperUserAppsExist() {
     return JNI_FALSE;
 }
 
+/**
+ * @brief Magisk-specific detection
+ * @return JNI_TRUE if Magisk artifacts found, JNI_FALSE otherwise
+ *
+ * @details Looks for:
+ *          - Magisk binaries
+ *          - Configuration files
+ *          - Database artifacts
+ *          - Hidden installations
+ *
+ * @note Magisk can hide these paths - consider runtime checks
+ */
 jboolean isRootedUsingMagisk() {
     const char* magisk_files[] = {
             "/sbin/magisk",
@@ -140,6 +185,16 @@ jboolean isRootedUsingMagisk() {
     return JNI_FALSE;
 }
 
+/**
+ * @brief Checks for SU symlinks
+ * @return JNI_TRUE if SU is a symlink, JNI_FALSE otherwise
+ *
+ * @details Verifies SU binaries at:
+ *          - /system/xbin/su
+ *          - /system/bin/su
+ *
+ * @note Symlinks may indicate root management systems
+ */
 jboolean isSuASymlink() {
     struct stat fileStat{};
     if (lstat("/system/xbin/su", &fileStat) == 0 && S_ISLNK(fileStat.st_mode)) {
@@ -151,6 +206,13 @@ jboolean isSuASymlink() {
     return JNI_FALSE;
 }
 
+/**
+ * @brief Inspects PATH for SU entries
+ * @return JNI_TRUE if PATH contains SU references, JNI_FALSE otherwise
+ *
+ * @warning Environment variables can be spoofed
+ * @note Checks both ':su' and 'su:' patterns
+ */
 jboolean isSuInEnvironmentPath() {
     const char* path = getenv("PATH");
     if (path != nullptr && (strstr(path, ":su") != nullptr || strstr(path, "su:") != nullptr)) {
