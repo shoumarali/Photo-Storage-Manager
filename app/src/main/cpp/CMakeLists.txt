@@ -14,6 +14,7 @@ set(SOURCES
         src/root_beer_checker.cpp
         src/native_root_checker.cpp
         src/native_system_integrity_verifier.cpp
+        src/native_emulator_checker.cpp
 )
 
 

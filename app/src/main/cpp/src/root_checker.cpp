@@ -8,6 +8,7 @@
 #include "root_beer_checker.h"
 #include "native_root_checker.h"
 #include "native_system_integrity_verifier.h"
+#include "native_emulator_checker.h"
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative(JNIEnv *env, jobject thiz){
@@ -41,7 +42,8 @@ Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative(JNIEnv *env
     jboolean isRootedUsingRootBeer = isRootedUsingRootBeerChecker(env, context);
     jboolean isRootedNative = isRootedUsingNativeChecks();
     jboolean isSystemModded = isSystemModified();
-    jboolean isRooted = isRootedUsingRootBeer || isRootedNative || isSystemModded;
+    jboolean isRunningOnEmulator = isDeviceEmulator();
+    jboolean isRooted = isRootedUsingRootBeer || isRootedNative || isSystemModded || isRunningOnEmulator;
 
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
