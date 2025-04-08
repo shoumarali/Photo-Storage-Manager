@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.presentation.utils.biometric
+package com.alishoumar.androidstorage.presentation.utils
 
 import android.annotation.SuppressLint
 import android.content.Context

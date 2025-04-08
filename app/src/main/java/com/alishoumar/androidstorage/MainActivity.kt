@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.alishoumar.androidstorage.databinding.ActivityMainBinding
-import com.alishoumar.androidstorage.presentation.utils.biometric.RootCheckUtils
+import com.alishoumar.androidstorage.presentation.utils.RootCheckUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
