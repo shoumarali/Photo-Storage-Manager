@@ -5,7 +5,6 @@
 #include <jni.h>
 #include <chrono>
 #include "log_utils.h"
-#include "root_beer_checker.h"
 #include "native_root_checker.h"
 #include "native_system_integrity_verifier.h"
 #include "native_emulator_checker.h"
@@ -39,11 +38,10 @@ Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative(JNIEnv *env
         return JNI_FALSE;
     }
 
-    jboolean isRootedUsingRootBeer = isRootedUsingRootBeerChecker(env, context);
     jboolean isRootedNative = isRootedUsingNativeChecks();
     jboolean isSystemModded = isSystemModified();
     jboolean isRunningOnEmulator = isDeviceEmulator();
-    jboolean isRooted = isRootedUsingRootBeer || isRootedNative || isSystemModded || isRunningOnEmulator;
+    jboolean isRooted = isRootedNative || isSystemModded || isRunningOnEmulator;
 
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();

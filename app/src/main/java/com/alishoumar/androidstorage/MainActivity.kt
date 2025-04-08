@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.alishoumar.androidstorage.databinding.ActivityMainBinding
+import com.alishoumar.androidstorage.presentation.utils.biometric.RootCheckUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +23,10 @@ class MainActivity : AppCompatActivity() {
 
         System.loadLibrary("root_checker")
 
-        isDeviceRootedNative()
+        if(RootCheckUtils.isDeviceRooted(applicationContext)){
+            finishAffinity()
+            return
+        }
 
         if(isDeviceRootedNative()){
             Toast.makeText(this, "Root detected! Closing app.", Toast.LENGTH_LONG).show()

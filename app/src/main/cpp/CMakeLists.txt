@@ -11,7 +11,6 @@ include_directories(
 
 set(SOURCES
         src/root_checker.cpp
-        src/root_beer_checker.cpp
         src/native_root_checker.cpp
         src/native_system_integrity_verifier.cpp
         src/native_emulator_checker.cpp
