@@ -1,5 +1,6 @@
 # VaultPic: A Privacy-Focused Photo Management Solution
-### [View on GitHub →](https://github.com/shoumarali/AndroidStorage)
+
+[View on GitHub →](https://github.com/shoumarali/AndroidStorage)
 
 ## Summary
 VaultPic is a secure photo vault that protects your private pictures from unauthorized access.
@@ -8,7 +9,8 @@ and works completely offline to ensure privacy. The app includes a discreet came
 protected photos and appears as a normal gallery to avoid suspicion, while secretly safeguarding
 your memories from prying eyes - whether from nosy friends, phone thieves, or hackers.
 
-## Root Detection Entry Point - [`root_checker.cpp`](file:///home/ashoumar/AndroidStudioProjects/AndroidStorage/app/src/main/cpp/docs/html/root__checker_8cpp.html)
+Root Detection Entry Point - [`root_checker.cpp`](https://shoumarali.github.io/vault-pic/root__checker_8cpp.html)
+
 *Native method that orchestrates all security checks*
 
 | Method                   | Description                          |
@@ -20,7 +22,8 @@ your memories from prying eyes - whether from nosy friends, phone thieves, or ha
 |                          | - Performance timing instrumentation |
 
 
-## Root Detection System - [`native_root_checker.cpp`](file:///home/ashoumar/AndroidStudioProjects/AndroidStorage/app/src/main/cpp/docs/html/native__root__checker_8cpp.html) 
+Root Detection System - [`native_root_checker.cpp`](https://shoumarali.github.io/vault-pic/native__root__checker_8cpp.html)
+
 *C++ class for comprehensive Android root detection*
 
 | Method                        | Detection Target                     |
@@ -34,7 +37,8 @@ your memories from prying eyes - whether from nosy friends, phone thieves, or ha
 | `isSuInEnvironmentPath()`     | Detects SU in system PATH |
 
 
-## System Integrity Checker - [`native_system_integrity_verifier.cpp`](file:///home/ashoumar/AndroidStudioProjects/AndroidStorage/app/src/main/cpp/docs/html/native__system__integrity__verifier_8cpp.html)
+System Integrity Checker - [`native_system_integrity_verifier.cpp`](https://shoumarali.github.io/vault-pic/native__system__integrity__verifier_8cpp.html)
+
 *C++ class for detecting OS modifications and security compromises*
 
 | Method                              | Detection Target                     |
@@ -47,7 +51,8 @@ your memories from prying eyes - whether from nosy friends, phone thieves, or ha
 | `isSELinuxNotEnforcing()`           | Validates SELinux enforcement status |
 | `isSELinuxCompromised()`            | Checks SELinux system properties |
 
-## Emulator Detection System - [`native_emulator_checker.cpp`](file:///home/ashoumar/AndroidStudioProjects/AndroidStorage/app/src/main/cpp/docs/html/native__emulator__checker_8cpp.html) 
+Emulator Detection System - [`native_emulator_checker.cpp`](https://shoumarali.github.io/vault-pic/native__emulator__checker_8cpp.html)
+
 *Low-level C++ implementation for identifying Android emulator environments*
 
 
