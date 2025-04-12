@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['main_20cpp_20docs_20html_20native_5f_5femulator_5f_5fchecker_5f8cpp_20html_20tt_20native_5femulator_5fchecker_20cpp_20tt_20a_0',['Emulator Detection System - &lt;a href=&quot;file:///home/ashoumar/AndroidStudioProjects/AndroidStorage/app/src/main/cpp/docs/html/native__emulator__checker_8cpp.html&quot; &gt;&lt;tt&gt;native_emulator_checker.cpp&lt;/tt&gt;&lt;/a&gt;',['../index.html#autotoc_md6',1,'']]],
-  ['main_20cpp_20docs_20html_20native_5f_5froot_5f_5fchecker_5f8cpp_20html_20tt_20native_5froot_5fchecker_20cpp_20tt_20a_1',['Root Detection System - &lt;a href=&quot;file:///home/ashoumar/AndroidStudioProjects/AndroidStorage/app/src/main/cpp/docs/html/native__root__checker_8cpp.html&quot; &gt;&lt;tt&gt;native_root_checker.cpp&lt;/tt&gt;&lt;/a&gt;',['../index.html#autotoc_md4',1,'']]],
-  ['main_20cpp_20docs_20html_20native_5f_5fsystem_5f_5fintegrity_5f_5fverifier_5f8cpp_20html_20tt_20native_5fsystem_5fintegrity_5fverifier_20cpp_20tt_20a_2',['System Integrity Checker - &lt;a href=&quot;file:///home/ashoumar/AndroidStudioProjects/AndroidStorage/app/src/main/cpp/docs/html/native__system__integrity__verifier_8cpp.html&quot; &gt;&lt;tt&gt;native_system_integrity_verifier.cpp&lt;/tt&gt;&lt;/a&gt;',['../index.html#autotoc_md5',1,'']]],
-  ['main_20cpp_20docs_20html_20root_5f_5fchecker_5f8cpp_20html_20tt_20root_5fchecker_20cpp_20tt_20a_3',['Root Detection Entry Point - &lt;a href=&quot;file:///home/ashoumar/AndroidStudioProjects/AndroidStorage/app/src/main/cpp/docs/html/root__checker_8cpp.html&quot; &gt;&lt;tt&gt;root_checker.cpp&lt;/tt&gt;&lt;/a&gt;',['../index.html#autotoc_md3',1,'']]],
-  ['mainpage_2emd_4',['mainpage.md',['../mainpage_8md.html',1,'']]],
-  ['management_20solution_5',['VaultPic: A Privacy-Focused Photo Management Solution',['../index.html',1,'']]]
+  ['native_5femulator_5fchecker_2ecpp_0',['native_emulator_checker.cpp',['../native__emulator__checker_8cpp.html',1,'']]],
+  ['native_5femulator_5fchecker_2eh_1',['native_emulator_checker.h',['../native__emulator__checker_8h.html',1,'']]],
+  ['native_5froot_5fchecker_2ecpp_2',['native_root_checker.cpp',['../native__root__checker_8cpp.html',1,'']]],
+  ['native_5froot_5fchecker_2eh_3',['native_root_checker.h',['../native__root__checker_8h.html',1,'']]],
+  ['native_5fsystem_5fintegrity_5fverifier_2ecpp_4',['native_system_integrity_verifier.cpp',['../native__system__integrity__verifier_8cpp.html',1,'']]],
+  ['native_5fsystem_5fintegrity_5fverifier_2eh_5',['native_system_integrity_verifier.h',['../native__system__integrity__verifier_8h.html',1,'']]]
 ];
