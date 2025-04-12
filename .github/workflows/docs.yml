@@ -6,6 +6,11 @@ on:
       - 'app/src/main/cpp/**'
       - '.github/workflows/docs.yml'
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   docs:
     runs-on: ubuntu-latest
