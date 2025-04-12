@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Doxygen outputs
+app/src/main/cpp/doxygen-awesome-css/
+app/src/main/cpp/docs/html/

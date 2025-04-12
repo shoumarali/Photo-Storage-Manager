@@ -1,0 +1,40 @@
+# Project settings
+USE_MDFILE_AS_MAINPAGE = mainpage.md
+PROJECT_NAME           = "VaultPic"
+PROJECT_BRIEF          = "This documentation is for the native"
+OUTPUT_DIRECTORY       = ./docs
+INPUT                  = ./src ./include mainpage.md
+RECURSIVE              = YES
+
+# Source code documentation
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = YES
+
+# Output formats
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+
+# Diagrams (optional - install graphviz first)
+HAVE_DOT               = YES
+CLASS_GRAPH            = YES
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+
+# HTML output options
+GENERATE_TREEVIEW      = YES # required!
+DISABLE_INDEX          = NO
+FULL_SIDEBAR           = NO
+HTML_COLORSTYLE        = LIGHT
+
+# Doxygen Awesome configuration
+HTML_EXTRA_STYLESHEET = doxygen-awesome-css/doxygen-awesome.css \
+                        doxygen-awesome-css/doxygen-awesome-sidebar-only.css \
+                        doxygen-awesome-css/doxygen-awesome-sidebar-only-darkmode-toggle.css
+
+HTML_EXTRA_FILES = doxygen-awesome-css/doxygen-awesome-darkmode-toggle.js \
+                   doxygen-awesome-css/doxygen-awesome-fragment-copy-button.js \
+                   doxygen-awesome-css/doxygen-awesome-interactive-toc.js \
+                   doxygen-awesome-css/doxygen-awesome-paragraph-link.js \
+                   doxygen-awesome-css/doxygen-awesome-tabs.js \
+                   doxygen-awesome-css/doxygen-awesome-sidebar-only.js
