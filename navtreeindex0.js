@@ -9,7 +9,6 @@ var NAVTREEINDEX0 =
 "index.html":[],
 "index.html":[0],
 "index.html#autotoc_md1":[0,0],
-"index.html#autotoc_md2":[0,1],
 "log__utils_8h.html":[1,0,0,0],
 "log__utils_8h.html#a07f1b0d507acedeb7550353eba4f6e66":[1,0,0,0,6],
 "log__utils_8h.html#a5512e59d578a380a441a70256af997d0":[1,0,0,0,4],
