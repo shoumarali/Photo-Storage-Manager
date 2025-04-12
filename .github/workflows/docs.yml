@@ -1,7 +1,7 @@
 name: Build and Deploy Docs
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths:
       - 'app/src/main/cpp/**'
       - '.github/workflows/docs.yml'
