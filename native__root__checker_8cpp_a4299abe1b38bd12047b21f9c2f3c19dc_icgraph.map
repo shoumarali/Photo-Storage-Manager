@@ -1,0 +1,7 @@
+<map id="isSuASymlink" name="isSuASymlink">
+<area shape="rect" id="Node000001" title="Checks for SU symlinks." alt="" coords="524,20,635,45"/>
+<area shape="rect" id="Node000002" href="$native__root__checker_8cpp.html#abd2c52dd60c9f0a35fa529b4d6eedfdb" title="Entry point for native root detection." alt="" coords="269,20,476,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="510,35,476,35,476,30,510,30"/>
+<area shape="rect" id="Node000003" href="$root__checker_8cpp.html#a4ac4a376ed308359b76195b78593c421" title="JNI entry point to check if the device is rooted or compromised." alt="" coords="5,5,221,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="255,35,222,35,222,30,255,30"/>
+</map>

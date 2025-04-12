@@ -1,0 +1,21 @@
+<map id="src/native_system_integrity_verifier.cpp" name="src/native_system_integrity_verifier.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="221,5,423,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,101,79,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="253,48,92,96,85,98,83,93,91,91,251,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="103,101,162,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="282,48,175,96,172,97,169,92,173,91,279,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="186,101,261,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="302,48,249,93,245,89,298,44"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="285,101,359,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="325,46,325,87,319,87,319,46"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="383,101,565,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="357,43,443,92,441,96,354,48"/>
+<area shape="rect" id="Node000007" href="$native__system__integrity__verifier_8h.html" title=" " alt="" coords="589,93,769,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="401,43,588,88,587,93,400,48"/>
+<area shape="rect" id="Node000009" href="$log__utils_8h.html" title=" " alt="" coords="793,101,883,126"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="424,33,593,55,688,71,783,91,795,94,793,99,781,96,687,76,592,60,423,39"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="654,181,705,207"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="682,134,682,167,677,167,677,134"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="785,181,891,207"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="841,126,841,167,835,167,835,126"/>
+</map>

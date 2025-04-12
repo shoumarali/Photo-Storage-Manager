@@ -1,0 +1,11 @@
+<map id="isSystemModified" name="isSystemModified">
+<area shape="rect" id="Node000001" title="Entry point for evaluating system integrity on Android devices." alt="" coords="5,95,144,121"/>
+<area shape="rect" id="Node000002" href="$native__system__integrity__verifier_8cpp.html#a612fbfc26b7234e21dd5205929bc23c5" title="Verifies if protected system partitions are mounted with read&#45;write access." alt="" coords="194,5,397,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,93,191,55,212,47,214,52,193,60,104,98"/>
+<area shape="rect" id="Node000003" href="$native__system__integrity__verifier_8cpp.html#a68df116004c9a3d93180ba82592789ed" title="Checks if the device&#39;s boot security has been compromised." alt="" coords="192,70,399,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="144,97,178,93,179,99,145,103"/>
+<area shape="rect" id="Node000004" href="$native__system__integrity__verifier_8cpp.html#add2d054f3261f31ba59e8964bd408653" title="Determines if the device is running a debug build of Android." alt="" coords="215,119,376,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="145,113,201,119,200,124,144,118"/>
+<area shape="rect" id="Node000005" href="$native__system__integrity__verifier_8cpp.html#a19783625dfe7f5003037413e89c55e8c" title="Checks if the system is debuggable or insecure." alt="" coords="215,169,375,194"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="105,118,193,153,224,163,222,168,191,159,103,123"/>
+</map>

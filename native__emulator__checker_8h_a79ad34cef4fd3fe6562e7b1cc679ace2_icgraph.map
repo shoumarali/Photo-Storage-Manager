@@ -1,0 +1,5 @@
+<map id="isDeviceEmulator" name="isDeviceEmulator">
+<area shape="rect" id="Node000001" title="Main entry point for native emulator detection." alt="" coords="269,20,407,45"/>
+<area shape="rect" id="Node000002" href="$root__checker_8cpp.html#a4ac4a376ed308359b76195b78593c421" title="JNI entry point to check if the device is rooted or compromised." alt="" coords="5,5,221,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,35,222,35,222,30,255,30"/>
+</map>

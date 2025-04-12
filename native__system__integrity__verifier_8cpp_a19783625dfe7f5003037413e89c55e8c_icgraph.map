@@ -1,0 +1,7 @@
+<map id="isSystemDebuggable" name="isSystemDebuggable">
+<area shape="rect" id="Node000001" title="Checks if the system is debuggable or insecure." alt="" coords="456,20,616,45"/>
+<area shape="rect" id="Node000002" href="$native__system__integrity__verifier_8cpp.html#adb9b9114d18ae0ceee9bf1bd5c63ba1d" title="Entry point for evaluating system integrity on Android devices." alt="" coords="269,20,408,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="442,35,408,35,408,30,442,30"/>
+<area shape="rect" id="Node000003" href="$root__checker_8cpp.html#a4ac4a376ed308359b76195b78593c421" title="JNI entry point to check if the device is rooted or compromised." alt="" coords="5,5,221,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="256,35,222,35,222,30,256,30"/>
+</map>

@@ -1,0 +1,37 @@
+<map id="Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative" name="Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative">
+<area shape="rect" id="Node000001" title="JNI entry point to check if the device is rooted or compromised." alt="" coords="5,312,221,367"/>
+<area shape="rect" id="Node000002" href="$native__emulator__checker_8cpp.html#a79ad34cef4fd3fe6562e7b1cc679ace2" title="Main entry point for native emulator detection." alt="" coords="304,104,441,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,310,345,136,348,140,148,314"/>
+<area shape="rect" id="Node000007" href="$native__root__checker_8cpp.html#abd2c52dd60c9f0a35fa529b4d6eedfdb" title="Entry point for native root detection." alt="" coords="269,327,476,352"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="222,337,255,337,255,342,222,342"/>
+<area shape="rect" id="Node000014" href="$native__system__integrity__verifier_8cpp.html#adb9b9114d18ae0ceee9bf1bd5c63ba1d" title="Entry point for evaluating system integrity on Android devices." alt="" coords="303,564,442,589"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="146,365,349,552,345,556,143,369"/>
+<area shape="rect" id="Node000003" href="$native__emulator__checker_8cpp.html#a9bde658328dc0cb2e65136c53253e31e" title="Checks build properties for emulator indicators." alt="" coords="548,5,707,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="394,102,452,71,523,40,548,32,549,37,525,44,454,76,397,106"/>
+<area shape="rect" id="Node000004" href="$native__emulator__checker_8cpp.html#ad7da94a64eddcdb41600d1d2fda881d5" title="Checks CPU architecture for emulator indicators." alt="" coords="544,55,711,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="438,101,547,80,548,85,439,107"/>
+<area shape="rect" id="Node000005" href="$native__emulator__checker_8cpp.html#ab9957ccb5a722253c5bc684837e04350" title="Checks for QEMU&#45;specific system properties." alt="" coords="535,104,720,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="442,114,521,114,521,119,442,119"/>
+<area shape="rect" id="Node000006" href="$native__emulator__checker_8cpp.html#afe9d2ad0cfc241c1f5f673d35f1a4a0a" title="Checks for existence of emulator&#45;specific files." alt="" coords="556,153,699,179"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="439,127,548,148,547,153,438,132"/>
+<area shape="rect" id="Node000008" href="$native__root__checker_8cpp.html#a060dccfced5eafb7b532f188e440f0ac" title="Detects BusyBox installations." alt="" coords="537,203,717,228"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="388,324,445,281,483,257,523,237,543,229,545,234,525,242,485,262,448,286,391,329"/>
+<area shape="rect" id="Node000009" href="$native__root__checker_8cpp.html#a3cce26ee629326e61652083aa2b94452" title="Scans for root management apps." alt="" coords="543,252,712,277"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="408,324,523,286,554,278,555,283,525,291,410,329"/>
+<area shape="rect" id="Node000010" href="$native__root__checker_8cpp.html#a709534c371b79996a1bfe3f0e83311da" title="Checks for common superuser binaries." alt="" coords="532,301,723,327"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="476,326,518,322,519,327,476,332"/>
+<area shape="rect" id="Node000011" href="$native__root__checker_8cpp.html#a88011ab9b00f9e88eb1aee6e8abe213e" title="Magisk&#45;specific detection." alt="" coords="546,351,709,376"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="476,346,532,352,532,357,476,352"/>
+<area shape="rect" id="Node000012" href="$native__root__checker_8cpp.html#a4299abe1b38bd12047b21f9c2f3c19dc" title="Checks for SU symlinks." alt="" coords="572,400,683,425"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="412,350,525,385,560,394,558,399,523,390,411,355"/>
+<area shape="rect" id="Node000013" href="$native__root__checker_8cpp.html#ac790bfa53456219b55f5efb1e173ae25" title="Inspects PATH for SU entries." alt="" coords="541,449,713,475"/>
+<area shape="poly" id="edge12_Node000007_Node000013" title=" " alt="" coords="391,350,448,391,486,414,525,434,549,443,547,448,523,439,483,419,445,396,388,354"/>
+<area shape="rect" id="Node000015" href="$native__system__integrity__verifier_8cpp.html#a612fbfc26b7234e21dd5205929bc23c5" title="Verifies if protected system partitions are mounted with read&#45;write access." alt="" coords="526,499,729,539"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="429,561,524,540,525,545,431,567"/>
+<area shape="rect" id="Node000016" href="$native__system__integrity__verifier_8cpp.html#a68df116004c9a3d93180ba82592789ed" title="Checks if the device&#39;s boot security has been compromised." alt="" coords="524,564,731,589"/>
+<area shape="poly" id="edge15_Node000014_Node000016" title=" " alt="" coords="442,574,510,574,510,579,442,579"/>
+<area shape="rect" id="Node000017" href="$native__system__integrity__verifier_8cpp.html#add2d054f3261f31ba59e8964bd408653" title="Determines if the device is running a debug build of Android." alt="" coords="547,613,708,639"/>
+<area shape="poly" id="edge16_Node000014_Node000017" title=" " alt="" coords="439,587,548,608,547,613,438,592"/>
+<area shape="rect" id="Node000018" href="$native__system__integrity__verifier_8cpp.html#a19783625dfe7f5003037413e89c55e8c" title="Checks if the system is debuggable or insecure." alt="" coords="547,663,707,688"/>
+<area shape="poly" id="edge17_Node000014_Node000018" title=" " alt="" coords="397,587,454,618,525,649,549,657,548,662,523,654,452,622,394,592"/>
+</map>
