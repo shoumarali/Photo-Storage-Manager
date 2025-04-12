@@ -9,6 +9,19 @@
 #include "native_system_integrity_verifier.h"
 #include "native_emulator_checker.h"
 
+
+/**
+ * @brief JNI entry point to check if the device is rooted or compromised.
+ * @param env The JNI environment pointer.
+ * @param thiz The reference to the calling Java object (MainActivity).
+ * @return JNI_TRUE if the device is detected to be rooted or compromised, otherwise JNI_FALSE.
+ *
+ * @details This function performs multiple checks to determine if the device is rooted,
+ * modified, or running in an emulator. It combines various native checks for system integrity
+ * to provide a more reliable root detection solution. The checks include root detection,
+ * system modifications, and emulator detection.
+ * The function also measures execution time and logs the result for debugging purposes.
+ */
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_alishoumar_androidstorage_MainActivity_isDeviceRootedNative(JNIEnv *env, jobject thiz){
 

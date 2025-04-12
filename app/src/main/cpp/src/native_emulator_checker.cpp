@@ -14,6 +14,16 @@ jboolean checkBuildProperties();
 jboolean checkEmulatorProperties();
 jboolean checkCPUArchitecture();
 
+
+/**
+ * @brief Main entry point for native emulator detection
+ * @return JNI_TRUE if the device is suspected to be an emulator, otherwise JNI_FALSE
+ *
+ * @details Performs multiple low-level checks to determine if the current device
+ * is running in an emulator environment. These checks rely on native-level inspection
+ * of system properties, file system, and CPU architecture to bypass app-level spoofing.
+ *
+ */
 jboolean isDeviceEmulator(){
     return checkCPUArchitecture() ||
     emulatorFileExists() ||

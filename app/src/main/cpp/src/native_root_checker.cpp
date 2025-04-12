@@ -17,6 +17,20 @@ jboolean isRootedUsingMagisk();
 jboolean isSuASymlink();
 jboolean isSuInEnvironmentPath();
 
+
+/**
+ * @brief Entry point for native root detection
+ * @return JNI_TRUE if device is suspected to be rooted, otherwise JNI_FALSE
+ *
+ * @details Performs a comprehensive root detection using native C++ code.
+ * Checks performed:
+ *   - Presence of common `su` binaries in system/user paths
+ *   - Presence of BusyBox binary (often installed alongside root tools)
+ *   - Installed root management apps like SuperSU or Magisk
+ *   - Magisk-specific artifacts, binaries, or configs
+ *   - Symbolic links on `su` binaries (a known root indicator)
+ *   - Whether `su` appears in the system environment PATH variable
+ */
 jboolean isRootedUsingNativeChecks() {
 
     if (doSuperUserBinariesExist()) {

@@ -16,13 +16,27 @@ jboolean isBootSecurityCompromised();
 jboolean isRunningDebugBuild();
 jboolean isSystemDebuggable();
 
+
+/**
+ * @brief Entry point for evaluating system integrity on Android devices.
+ *
+ * @return JNI_TRUE if the system appears modified, insecure, or compromised; otherwise JNI_FALSE.
+ *
+ * @details Aggregates results from multiple system integrity checks to detect signs of:
+ *   - Root access or remounted system partitions
+ *   - Compromised boot state (unlocked bootloader, disabled dm-verity, etc.)
+ *   - Debugging flags enabled (engineering/userdebug builds, `ro.debuggable`)
+ *   - Insecure system configuration (`ro.secure` set to 0)
+ *
+ * @note Uses system properties and file system inspection to make determinations.
+ *       May not be foolproof on heavily modified or non-standard ROMs.
+ */
 jboolean isSystemModified(){
     return doWritableSystemPartitionsExist() ||
     isBootSecurityCompromised() ||
     isRunningDebugBuild() ||
     isSystemDebuggable();
 }
-
 
 /**
  * @brief Verifies if protected system partitions are mounted with read-write access.
