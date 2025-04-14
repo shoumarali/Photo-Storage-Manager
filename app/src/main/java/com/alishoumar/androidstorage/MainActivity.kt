@@ -1,6 +1,7 @@
 package com.alishoumar.androidstorage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -21,12 +22,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        System.loadLibrary("root_checker")
 
-        if (isDeviceRooted() || isDeveloperModeEnabled()) {
-            showRootOrDevModeDetectedToast()
-            finishAffinity()
-            return
+        if(!BuildConfig.DEBUG) {
+            System.loadLibrary("root_checker")
+            if (isDeviceRooted() || isDeveloperModeEnabled()) {
+                showRootOrDevModeDetectedToast()
+                finishAffinity()
+                return
+            }
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)

@@ -1,5 +1,7 @@
 package com.alishoumar.androidstorage.presentation.adapter
 
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
@@ -64,14 +66,17 @@ class SharedStoragePhotoAdapter(
         fun bind(photo: ExternalStoragePhoto) {
             currentPhoto = photo
 
-            binding.ivPhoto.load(photo.uri) {
-                lifecycle(lifeCycleOwner)
-                crossfade(true)
-                size(344, 344)
-                diskCachePolicy(CachePolicy.ENABLED)
-                memoryCachePolicy(CachePolicy.ENABLED)
-                placeholder(R.drawable.baseline_photo_24)
-            }
+//            Handler(Looper.getMainLooper()).postDelayed({
+                binding.ivPhoto.load(photo.uri) {
+                    lifecycle(lifeCycleOwner)
+                    crossfade(true)
+                    size(344,344)
+                    diskCachePolicy(CachePolicy.ENABLED)
+                    memoryCachePolicy(CachePolicy.ENABLED)
+                    placeholder(R.drawable.baseline_photo_24)
+                    allowHardware(false)
+                }
+//            }, 100)
 
             constraintSet.apply {
                 clone(binding.root)
