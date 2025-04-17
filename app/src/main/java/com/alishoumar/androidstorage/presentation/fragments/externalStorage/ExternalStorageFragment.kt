@@ -96,6 +96,9 @@ class ExternalStorageFragment : Fragment() {
 
     private fun setUpRecyclerView(){
         binding.rvPublicPhotos.apply{
+            setItemViewCacheSize(40)
+            setHasFixedSize(true)
+            recycledViewPool.setMaxRecycledViews(0,40)
             adapter = externalStoragePhotoAdapter
             layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
             addItemDecoration(itemDecoration)

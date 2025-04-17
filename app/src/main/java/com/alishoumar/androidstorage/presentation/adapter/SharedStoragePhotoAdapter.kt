@@ -66,17 +66,15 @@ class SharedStoragePhotoAdapter(
         fun bind(photo: ExternalStoragePhoto) {
             currentPhoto = photo
 
-//            Handler(Looper.getMainLooper()).postDelayed({
                 binding.ivPhoto.load(photo.uri) {
                     lifecycle(lifeCycleOwner)
                     crossfade(true)
+                    placeholder(R.drawable.baseline_photo_24)
                     size(344,344)
                     diskCachePolicy(CachePolicy.ENABLED)
                     memoryCachePolicy(CachePolicy.ENABLED)
-                    placeholder(R.drawable.baseline_photo_24)
                     allowHardware(false)
                 }
-//            }, 100)
 
             constraintSet.apply {
                 clone(binding.root)

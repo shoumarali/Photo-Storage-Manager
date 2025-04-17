@@ -1,3 +1,5 @@
+> 🚧 **Note:** This project is in early-stage development and actively being built by a solo developer.
+
 # VaultPic 🔒📸
 
 A secure photo vault that protects your private pictures with biometric authentication and military-grade encryption.
