@@ -70,17 +70,16 @@ class SharedStoragePhotoAdapter(
                     lifecycle(lifeCycleOwner)
                     crossfade(true)
                     placeholder(R.drawable.baseline_photo_24)
-                    size(344,344)
+                    size(300)
                     diskCachePolicy(CachePolicy.ENABLED)
                     memoryCachePolicy(CachePolicy.ENABLED)
-                    allowHardware(false)
                 }
 
-            constraintSet.apply {
-                clone(binding.root)
-                setDimensionRatio(binding.ivPhoto.id, currentPhoto?.aspectRatio.toString())
-                applyTo(binding.root)
-            }
+//            constraintSet.apply {
+//                clone(binding.root)
+//                setDimensionRatio(binding.ivPhoto.id, currentPhoto?.aspectRatio.toString())
+//                applyTo(binding.root)
+//            }
         }
     }
 

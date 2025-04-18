@@ -2,8 +2,16 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.AndroidStorage" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.AndroidStorage" parent="Base.Theme.AndroidStorage" />
+    <style name="Theme.AndroidStorage" parent="Base.Theme.AndroidStorage">
+        <!-- Your main app theme settings -->
+    </style>
+
+    <style name="Theme.AndroidStorage.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/vault_pic</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/Theme.AndroidStorage</item>
+    </style>
 </resources>

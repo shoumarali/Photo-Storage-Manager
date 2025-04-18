@@ -97,7 +97,11 @@ dependencies {
     //photoView
     implementation(libs.photoview)
 
+    //rootbeer
     implementation(libs.rootbeer.lib)
+
+    //splash api
+    implementation(libs.androidx.core.splashscreen)
 
 }
 kapt {
