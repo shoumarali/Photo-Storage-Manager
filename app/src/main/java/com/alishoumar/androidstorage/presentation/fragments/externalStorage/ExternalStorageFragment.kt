@@ -1,20 +1,16 @@
 package com.alishoumar.androidstorage.presentation.fragments.externalStorage
 
 import android.database.ContentObserver
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -22,10 +18,8 @@ import com.alishoumar.androidstorage.R
 import com.alishoumar.androidstorage.databinding.FragmentExternalStorageBinding
 import com.alishoumar.androidstorage.presentation.adapter.SharedStoragePhotoAdapter
 import com.alishoumar.androidstorage.presentation.adapter.SpaceItemDecoration
+import com.alishoumar.androidstorage.presentation.utils.permission.PermissionsUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 @AndroidEntryPoint
 class ExternalStorageFragment : Fragment() {
 
@@ -36,8 +30,6 @@ class ExternalStorageFragment : Fragment() {
     private lateinit var externalStoragePhotoAdapter: SharedStoragePhotoAdapter
     private lateinit var contentObserver : ContentObserver
     private lateinit var itemDecoration : SpaceItemDecoration
-    private var deletedPhotoUri: Uri? = null
-    private lateinit var intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
     private lateinit var registerPermissions: ActivityResultLauncher<Array<String>>
 
     override fun onCreateView(
@@ -55,12 +47,6 @@ class ExternalStorageFragment : Fragment() {
 
         externalStoragePhotoAdapter = SharedStoragePhotoAdapter (
             viewLifecycleOwner,
-            onPhotoClick = {
-                lifecycleScope.launch {
-                    deletePhotoFromExternalStorage(it.uri)
-                    deletedPhotoUri = it.uri
-                }
-            }
         ){
             val bundle = Bundle().apply {
                 putParcelable("photo",it)
@@ -72,26 +58,31 @@ class ExternalStorageFragment : Fragment() {
             )
         }
 
-        intentSenderLauncher =registerForActivityResult(
-            contract = ActivityResultContracts.StartIntentSenderForResult(),
-            callback = {
-                if (it.resultCode == RESULT_OK) {
-                    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
-                        lifecycleScope.launch {
-                            deletePhotoFromExternalStorage(deletedPhotoUri ?: return@launch)
-                        }
-                    }
-                }
-            }
-        )
         registerPermissions = registerForActivityResult(
             contract = ActivityResultContracts.RequestMultiplePermissions(),
-            callback = {}
-        )
+            callback = { permissions ->
+                val allGranted = permissions.all { it.value }
+                if( allGranted ){
+                    setUpRecyclerView()
+                    setUpObservables()
+                    initContentObserver()
+                }else{
+                    Toast.makeText(
+                        requireContext(),
+                        "Allow storage access to view external images",
+                        Toast.LENGTH_SHORT).show()
+                }
+            })
+
+        val unGrantedPermissions = PermissionsUtil.getUnGrantedPermissions(requireContext())
 
         setUpRecyclerView()
-        setUpObservables()
-        initContentObserver()
+        if (unGrantedPermissions.isEmpty()) {
+            setUpObservables()
+            initContentObserver()
+        } else {
+            registerPermissions.launch(unGrantedPermissions.toTypedArray())
+        }
     }
 
     private fun setUpRecyclerView(){
@@ -107,10 +98,7 @@ class ExternalStorageFragment : Fragment() {
     }
 
     private fun setUpObservables(){
-        externalStorageViewModel.unGrantedPermissions.observe(viewLifecycleOwner){
-            if(it.isNotEmpty())
-                registerPermissions.launch(it.toTypedArray())
-        }
+
 
         externalStorageViewModel.externalStoragePhotos.observe(viewLifecycleOwner) { newList ->
             if (externalStoragePhotoAdapter.currentList != newList) {
@@ -119,15 +107,6 @@ class ExternalStorageFragment : Fragment() {
         }
     }
 
-    private suspend fun deletePhotoFromExternalStorage(photoUri: Uri){
-        withContext (Dispatchers.IO){
-            externalStorageViewModel.deletePhotoFromExternalStorage(photoUri)?.let {sender ->
-                intentSenderLauncher.launch(
-                    IntentSenderRequest.Builder(sender).build()
-                )
-            }
-        }
-    }
 
     private fun initContentObserver(){
         contentObserver = object : ContentObserver(null){

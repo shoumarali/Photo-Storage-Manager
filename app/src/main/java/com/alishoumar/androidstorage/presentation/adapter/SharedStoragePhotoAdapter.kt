@@ -22,7 +22,6 @@ import com.alishoumar.androidstorage.presentation.adapter.InternalStoragePhotoAd
 
 class SharedStoragePhotoAdapter(
     val lifeCycleOwner: LifecycleOwner,
-    val onPhotoClick:(ExternalStoragePhoto) -> Unit,
     val onImageClick:(ExternalStoragePhoto) -> Unit
 ) : ListAdapter<ExternalStoragePhoto, SharedStoragePhotoAdapter.SharedStoragePhotoViewHolder>(
     Companion
@@ -53,11 +52,6 @@ class SharedStoragePhotoAdapter(
         private var currentPhoto: ExternalStoragePhoto? = null
 
         init {
-            binding.ivPhoto.setOnLongClickListener {
-                currentPhoto?.let { onPhotoClick(it) }
-                true
-            }
-
             binding.ivPhoto.setOnClickListener {
                 currentPhoto?.let { onImageClick(it) }
             }

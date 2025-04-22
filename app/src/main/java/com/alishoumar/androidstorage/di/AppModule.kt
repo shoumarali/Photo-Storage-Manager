@@ -13,7 +13,6 @@ import com.alishoumar.androidstorage.domain.usecases.InternalStorage.SavePhotoIn
 import com.alishoumar.androidstorage.domain.usecases.externalStorage.DeletePhotoFromExternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.externalStorage.LoadPhotosFromExternalStorageUseCase
 import com.alishoumar.androidstorage.domain.usecases.externalStorage.SavePhotoToExternalStorageUseCase
-import com.alishoumar.androidstorage.domain.usecases.permissions.GetUnGrantedPermissionsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -111,11 +110,4 @@ object AppModule {
         return DeletePhotoFromExternalStorageUseCase(externalStorageRepository)
     }
 
-    @Singleton
-    @Provides
-    fun provideGetUnGrantedPermissions(
-        application: Application
-    ):GetUnGrantedPermissionsUseCase{
-        return GetUnGrantedPermissionsUseCase(application)
-    }
 }
