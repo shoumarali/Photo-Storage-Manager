@@ -110,35 +110,37 @@ class CameraFragment : Fragment() {
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
-                    super.onCaptureSuccess(image)
+                    try {
+                        val frontCameraOrBack =
+                            cameraController.cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA
 
-                    val frontCameraOrBack =
-                        cameraController.cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA
+                        if (savePhotoInInternalStorage) {
+                            viewModel.savePhotoToInternalStorage(
+                                createFileName(
+                                    isSavingEncrypted = true,
+                                    width = image.width,
+                                    height = image.height
+                                ),
+                                image,
+                                frontCameraOrBack
+                            )
+                        } else {
+                            viewModel.savePhotoToExternalStorage(
+                                createFileName(),
+                                image,
+                                frontCameraOrBack
+                            )
+                        }
 
-                    if (savePhotoInInternalStorage) {
-                        viewModel.savePhotoToInternalStorage(
-                            createFileName(
-                                isSavingEncrypted = true,
-                                width = image.width,
-                                height = image.height
-                            ),
-                            image,
-                            frontCameraOrBack
-                        )
-                    } else {
-                        viewModel.savePhotoToExternalStorage(
-                            createFileName(),
-                            image,
-                            frontCameraOrBack
-                        )
+                        Toast.makeText(requireContext(), "Photo saved", Toast.LENGTH_SHORT).show()
+                    } finally {
+                        image.close()
                     }
-
+                    canTakePhoto = true;
                     Handler(Looper.getMainLooper()).postDelayed({
                         canTakePhoto = true
                         binding.ibTakePhoto.isEnabled = true
                     }, 1500)
-
-                    Toast.makeText(requireContext(), "Photo saved", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onError(exception: ImageCaptureException) {
