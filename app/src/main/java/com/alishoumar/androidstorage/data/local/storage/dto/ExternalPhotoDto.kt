@@ -1,4 +1,4 @@
-package com.alishoumar.androidstorage.data.local.storage.dao
+package com.alishoumar.androidstorage.data.local.storage.dto
 
 import android.net.Uri
 

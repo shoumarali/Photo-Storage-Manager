@@ -9,7 +9,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import com.alishoumar.androidstorage.data.local.storage.dao.ExternalPhotoDto
+import com.alishoumar.androidstorage.data.local.storage.dto.ExternalPhotoDto
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 
