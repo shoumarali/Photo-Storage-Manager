@@ -29,7 +29,10 @@ class CameraViewModel @Inject constructor(
         frontCamera: Boolean
     ){
         viewModelScope.launch(Dispatchers.IO) {
-            savePhotoToInternalStorageUseCase(filename, mirrorImageOrNo(image,frontCamera))
+            image.use { image ->
+                val bitmap = mirrorImageOrNo(image, frontCamera)
+                savePhotoToInternalStorageUseCase(filename, bitmap)
+            }
         }
     }
     fun savePhotoToExternalStorage(
@@ -38,11 +41,14 @@ class CameraViewModel @Inject constructor(
         frontCamera: Boolean
     ){
         viewModelScope.launch (Dispatchers.IO){
-            savePhotoToExternalStorageUseCase(
-                getCollection(),
-                displayName,
-                mirrorImageOrNo(image,frontCamera)
-            )
+            image.use { image ->
+                val bitmap = mirrorImageOrNo(image, frontCamera)
+                savePhotoToExternalStorageUseCase(
+                    getCollection(),
+                    displayName,
+                    bitmap
+                )
+            }
         }
     }
 

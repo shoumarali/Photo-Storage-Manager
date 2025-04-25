@@ -7,8 +7,7 @@
     tools:context=".presentation.fragments.Camera.CameraFragment">
 
 
-    <androidx.camera.view.PreviewView
-        android:id="@+id/cameraPreview"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -16,7 +15,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/cameraActions"
         android:layout_marginVertical="24dp"
-        />
+        >
+        <androidx.camera.view.PreviewView
+            android:id="@+id/cameraPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <View
+            android:id="@+id/flash_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:visibility="invisible" />
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/cameraActions"
@@ -36,7 +48,7 @@
             android:layout_weight="1"
             android:layout_height="48dp"
             android:contentDescription="Capture Private Photo"
-            android:src="@drawable/baseline_lock_24"
+            android:src="@drawable/ic_private_mode_toggle"
             android:layout_marginStart="16dp"
             android:background="@android:color/transparent"
             />
@@ -61,9 +73,5 @@
             android:background="@android:color/transparent"
             />
     </LinearLayout>
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
