@@ -17,6 +17,7 @@ import com.alishoumar.androidstorage.databinding.FragmentInternalStorageBinding
 import com.alishoumar.androidstorage.presentation.adapter.InternalStoragePhotoAdapter
 import com.alishoumar.androidstorage.presentation.adapter.SpaceItemDecoration
 import com.alishoumar.androidstorage.presentation.fragments.shared.AuthSharedViewModel
+import com.alishoumar.androidstorage.presentation.fragments.shared.ImageRefreshViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,6 +32,7 @@ class InternalStorageFragment : Fragment() {
     private lateinit var internalStoragePhotoAdapter: InternalStoragePhotoAdapter
     private lateinit var itemDecoration : SpaceItemDecoration
     private val internalStorageViewModel: InternalStorageViewModel by viewModels()
+    private val imageRefreshViewModel: ImageRefreshViewModel by activityViewModels()
     private val authSharedViewModel: AuthSharedViewModel by activityViewModels()
 
     @Inject
@@ -73,10 +75,13 @@ class InternalStorageFragment : Fragment() {
     }
 
     private fun setUpObservables(){
+
         internalStorageViewModel.internalPhotos.observe(viewLifecycleOwner) {
             internalStoragePhotoAdapter.submitList(it)
-            Log.d("tag", "setUpObservables: $it")
+        }
 
+        imageRefreshViewModel.internalStorageChanged.observe(viewLifecycleOwner) {
+            internalStorageViewModel.loadPhotosFromInternalStorage()
         }
     }
 }

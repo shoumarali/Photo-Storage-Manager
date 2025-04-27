@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.camera.core.ImageProxy
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alishoumar.androidstorage.domain.usecases.InternalStorage.SavePhotoInternalStorageUseCase
@@ -26,19 +27,23 @@ class CameraViewModel @Inject constructor(
     fun savePhotoToInternalStorage(
         filename:String,
         image: ImageProxy,
-        frontCamera: Boolean
+        frontCamera: Boolean,
+        photoSaved: (Boolean) -> Unit
     ){
         viewModelScope.launch(Dispatchers.IO) {
             image.use { image ->
                 val bitmap = mirrorImageOrNo(image, frontCamera)
                 savePhotoToInternalStorageUseCase(filename, bitmap)
             }
+            withContext(Dispatchers.Main) {
+                photoSaved(true)
+            }
         }
     }
     fun savePhotoToExternalStorage(
         displayName:String,
         image: ImageProxy,
-        frontCamera: Boolean
+        frontCamera: Boolean,
     ){
         viewModelScope.launch (Dispatchers.IO){
             image.use { image ->

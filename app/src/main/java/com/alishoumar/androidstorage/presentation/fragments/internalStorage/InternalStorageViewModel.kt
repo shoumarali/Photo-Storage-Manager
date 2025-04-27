@@ -28,9 +28,8 @@ class InternalStorageViewModel @Inject constructor(
         loadPhotosFromInternalStorage()
     }
 
-     private fun loadPhotosFromInternalStorage(){
+    fun loadPhotosFromInternalStorage(){
         viewModelScope.launch(Dispatchers.IO){
-//            delay(200)
             val data = useCases.loadPhotosFromInternalStorageUseCase()
             withContext(Dispatchers.Main){
                 _internalPhotos.value = data

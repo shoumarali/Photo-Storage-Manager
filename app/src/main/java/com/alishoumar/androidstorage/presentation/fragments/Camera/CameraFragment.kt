@@ -8,20 +8,16 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
-import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.alishoumar.androidstorage.R
 import com.alishoumar.androidstorage.databinding.FragmentCameraBinding
+import com.alishoumar.androidstorage.presentation.fragments.shared.ImageRefreshViewModel
 import com.alishoumar.androidstorage.presentation.utils.FileUtils.createFileName
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,6 +28,7 @@ class CameraFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: CameraViewModel by viewModels()
+    private val imageRefreshViewModel: ImageRefreshViewModel by activityViewModels()
 
     private var isPrivateMode = false
 
@@ -118,7 +115,10 @@ class CameraFragment : Fragment() {
                     ),
                     image,
                     frontCameraOrBack
-                )
+                ){ imageSaved ->
+                    if(imageSaved)
+                        imageRefreshViewModel.notifyInternalStorageChanged()
+                }
             } else {
                 viewModel.savePhotoToExternalStorage(
                     createFileName(),
