@@ -60,7 +60,11 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.bottomNavigationView.visibility = if (destination.id == R.id.imageFragment) View.GONE else View.VISIBLE
+            binding.bottomNavigationView.visibility = if (
+                destination.id == R.id.imageFragment ||
+                destination.id == R.id.privateImageFragment
+                )
+                View.GONE else View.VISIBLE
         }
     }
 

@@ -17,17 +17,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import coil.ImageLoader
 import coil.load
 import com.alishoumar.androidstorage.R
+import com.alishoumar.androidstorage.data.utils.CryptoManager
 import com.alishoumar.androidstorage.databinding.FragmentImageBinding
 import com.alishoumar.androidstorage.domain.models.ExternalStoragePhoto
+import com.alishoumar.androidstorage.presentation.adapter.fetcher.EncryptedImageFetcherFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ImageFragment : Fragment() {
+
+
 
     private var _binding: FragmentImageBinding? = null
     private val binding get() = _binding!!
@@ -93,6 +99,7 @@ class ImageFragment : Fragment() {
                 startActivity(it)
             }
         }
+
 
         if (photo != null) {
             binding.ivOpenedImage.load(photo.uri) {

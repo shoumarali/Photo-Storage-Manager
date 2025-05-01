@@ -36,7 +36,7 @@ class InternalStorageFragment : Fragment() {
     private val authSharedViewModel: AuthSharedViewModel by activityViewModels()
 
     @Inject
-    lateinit var cryptoManager: CryptoManager;
+    lateinit var cryptoManager: CryptoManager
 
 
     override fun onCreateView(
@@ -58,7 +58,14 @@ class InternalStorageFragment : Fragment() {
             internalStoragePhotoAdapter = InternalStoragePhotoAdapter(
                 cryptoManager
             ) {
-                internalStorageViewModel.deletePhotoFromInternalStorage(it.name)
+                val bundle = Bundle().apply {
+                    putString("filePath",it.filePath)
+                    putString("fileName",it.name)
+                }
+                findNavController().navigate(
+                    R.id.action_internalStorageFragment_to_privateImageFragment,
+                    bundle
+                )
             }
             itemDecoration = SpaceItemDecoration(4)
             setUpRecyclerView()
@@ -71,6 +78,8 @@ class InternalStorageFragment : Fragment() {
             adapter = internalStoragePhotoAdapter
             layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
             addItemDecoration(itemDecoration)
+            setItemViewCacheSize(40)
+            setHasFixedSize(true)
         }
     }
 

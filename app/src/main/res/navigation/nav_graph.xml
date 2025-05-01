@@ -13,8 +13,8 @@
             android:id="@+id/action_internalStorageFragment_to_biometricFragment"
             app:destination="@id/biometricFragment" />
         <action
-            android:id="@+id/action_internalStorageFragment_to_imageFragment"
-            app:destination="@id/imageFragment" />
+            android:id="@+id/action_internalStorageFragment_to_privateImageFragment"
+            app:destination="@id/privateImageFragment" />
     </fragment>
     <fragment
         android:id="@+id/externalStorageFragment"
@@ -44,4 +44,8 @@
         android:name="com.alishoumar.androidstorage.presentation.fragments.Image.ImageFragment"
         android:label="fragment_image"
         tools:layout="@layout/fragment_image" />
+    <fragment
+        android:id="@+id/privateImageFragment"
+        android:name="com.alishoumar.androidstorage.presentation.fragments.privateImage.PrivateImageFragment"
+        android:label="PrivateImageFragment" />
 </navigation>

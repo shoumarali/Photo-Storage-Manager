@@ -27,7 +27,6 @@ class SharedStoragePhotoAdapter(
     Companion
 ) {
 
-    private val constraintSet= ConstraintSet()
 
     companion object : DiffUtil.ItemCallback<ExternalStoragePhoto>(){
         override fun areItemsTheSame(
@@ -68,12 +67,6 @@ class SharedStoragePhotoAdapter(
                     diskCachePolicy(CachePolicy.ENABLED)
                     memoryCachePolicy(CachePolicy.ENABLED)
                 }
-
-//            constraintSet.apply {
-//                clone(binding.root)
-//                setDimensionRatio(binding.ivPhoto.id, currentPhoto?.aspectRatio.toString())
-//                applyTo(binding.root)
-//            }
         }
     }
 

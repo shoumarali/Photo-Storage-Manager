@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.load
 import coil.request.CachePolicy
+import com.alishoumar.androidstorage.R
 import com.alishoumar.androidstorage.data.utils.CryptoManager
 import com.alishoumar.androidstorage.domain.models.InternalStoragePhoto
 import com.alishoumar.androidstorage.databinding.ItemPhotoBinding
+import com.alishoumar.androidstorage.domain.models.ExternalStoragePhoto
 import com.alishoumar.androidstorage.presentation.adapter.fetcher.EncryptedImageFetcher
 import com.alishoumar.androidstorage.presentation.adapter.fetcher.EncryptedImageFetcherFactory
 
@@ -28,7 +30,7 @@ performance will be better
 
 class InternalStoragePhotoAdapter(
     private val cryptoManager: CryptoManager,
-    private val onPhotoClick : (internalPhoto : InternalStoragePhoto) -> Unit
+    private val onImageClick : (internalPhoto : InternalStoragePhoto) -> Unit
 ) : ListAdapter<InternalStoragePhoto, InternalStoragePhotoAdapter.InternalStoragePhotoViewHolder>(
     Companion
 ) {
@@ -36,7 +38,46 @@ class InternalStoragePhotoAdapter(
 
     inner class InternalStoragePhotoViewHolder(
         val binding: ItemPhotoBinding
-    ): RecyclerView.ViewHolder(binding.root)
+    ): RecyclerView.ViewHolder(binding.root){
+        private var currentPhoto: InternalStoragePhoto? = null
+        private var imageLoader : ImageLoader? = null
+
+        init {
+            imageLoader = ImageLoader.Builder(itemView.context)
+                .components {
+                    add(EncryptedImageFetcherFactory(
+                        cryptoManager,
+                        itemView.context))
+                }
+                .build()
+
+            binding.ivPhoto.setOnClickListener {
+                currentPhoto?.let { onImageClick(it) }
+            }
+        }
+
+        fun bind(photo: InternalStoragePhoto) {
+            currentPhoto = photo
+
+            binding.ivPhoto.load(photo.filePath, imageLoader!!) {
+                crossfade(true)
+                size(344, 344)
+                diskCachePolicy(CachePolicy.ENABLED)
+                memoryCachePolicy(CachePolicy.ENABLED)
+                placeholder(R.drawable.baseline_photo_24)
+            }
+
+            val photoWidthAndHeight = photo.name.split("#")[1].split("x")
+
+            val aspectRatio = photoWidthAndHeight[0].toFloat() / photoWidthAndHeight[1].removeSuffix(".enc").toFloat()
+            ConstraintSet().apply {
+                clone(binding.root)
+                setDimensionRatio(binding.ivPhoto.id, aspectRatio.toString())
+                applyTo(binding.root)
+            }
+        }
+
+    }
 
     companion object : DiffUtil.ItemCallback<InternalStoragePhoto>(){
         override fun areItemsTheSame(
@@ -70,40 +111,8 @@ class InternalStoragePhotoAdapter(
 
     override fun onBindViewHolder(holder: InternalStoragePhotoViewHolder, position: Int) {
         val photo = currentList[position]
-
-
-        val imageLoader = ImageLoader.Builder(holder.itemView.context)
-            .components {
-                add(EncryptedImageFetcherFactory(
-                    cryptoManager,
-                    holder.itemView.context))
-            }
-            .build()
-
-
         holder.binding.apply {
-
-
-            ivPhoto.load(photo.filePath, imageLoader) {
-                crossfade(true)
-                size(344, 344)
-                diskCachePolicy(CachePolicy.ENABLED)
-                memoryCachePolicy(CachePolicy.ENABLED)
-            }
-
-            val photoWidthAndHeight = photo.name.split("#")[1].split("x")
-
-            val aspectRatio = photoWidthAndHeight[0].toFloat() / photoWidthAndHeight[1].removeSuffix(".enc").toFloat()
-            ConstraintSet().apply {
-                clone(root)
-                setDimensionRatio(ivPhoto.id, aspectRatio.toString())
-                applyTo(root)
-            }
-
-            ivPhoto.setOnLongClickListener{
-                onPhotoClick(photo)
-                true
-            }
+            holder.bind(photo)
         }
     }
 }

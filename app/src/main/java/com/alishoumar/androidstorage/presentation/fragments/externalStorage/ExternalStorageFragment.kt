@@ -93,7 +93,6 @@ class ExternalStorageFragment : Fragment() {
             adapter = externalStoragePhotoAdapter
             layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
             addItemDecoration(itemDecoration)
-            setHasFixedSize(true)
         }
     }
 
